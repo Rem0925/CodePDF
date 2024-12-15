@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía de Uso - Editor de Código</title>
+  <link rel="stylesheet" href="style/styleDoc.css" />
+</head>
+<body>
+  <header>
+    <h1>Guía de Uso del Editor de Código</h1>
+  </header>
+  <main class="container">
+    <section class="intro editor-container">
+      <h2>¿Qué es este editor?</h2>
+      <p>Este editor de código permite crear documentos PDF aplicando las normas APA utilizando etiquetas.</p>
+    </section>
+    <section class="instructions editor-container">
+      <h2>Instrucciones de Uso</h2>
+      <ol>
+        <li>
+          <strong>Escribe tu contenido:</strong> Utiliza las etiquetas personalizadas para estructurar tu documento. Por ejemplo, usa <code>@titulo1@</code> para un título principal.
+        </li>
+        <li>
+          <strong>Inserta contenido:</strong> Puedes insertar texto de ejemplo utilizando la etiqueta <code>@Lorem@</code>.
+        </li>
+        <li>
+          <strong>Genera el PDF:</strong> Haz clic en el botón "Generar PDF" para crear tu documento en formato PDF.
+        </li>
+        <li>
+          <strong>Visualiza el PDF:</strong> El PDF generado se mostrará en un marco de vista previa.
+        </li>
+      </ol>
+    </section>
+    <section class="autocomplete editor-container">
+      <h2>Funcionamiento del Autocompletado</h2>
+      <p>El autocompletado en el editor de código funciona de la siguiente manera:</p>
+      <ol>
+        <li>
+          <strong>Detección de Guion:</strong> Cuando el usuario escribe un guion (<code>-</code>), el editor activa la función de autocompletado.
+        </li>
+        <li>
+          <strong>Filtrado de Etiquetas:</strong> El editor filtra las etiquetas disponibles basándose en lo que el usuario ha escrito después del guion.
+        </li>
+        <li>
+          <strong>Sugerencias:</strong> Se muestran sugerencias en un contenedor de autocompletado, permitiendo al usuario seleccionar la etiqueta deseada.
+        </li>
+        <li>
+          <strong>Inserción de Etiquetas:</strong> Al hacer clic en una sugerencia, la etiqueta se inserta en el texto.
+        </li>
+      </ol>
+      <h3>Ejemplo de Autocompletado</h3>
+      <p>Si el usuario escribe <code>-ti</code>, el editor podría mostrar las siguientes sugerencias:</p>
+      <ul>
+        <li><code>titulo1</code></li>
+        <li><code>titulo2</code></li>
+        <li><code>subTitulo</code></li>
+        <li>etc...</li>
+      </ul>
+      <p>Al seleccionar <code>titulo1</code>, el texto se convierte en:</p>
+      <pre><code>@titulo1@
+@/titulo1@</code></pre>
+    </section>
+    <section class="tags editor-container">
+      <h2>Etiquetas</h2>
+      <ul>
+        <li><code>@titulo1-2-3-4-5@</code> - Título principal y demás niveles de títulos</li>
+        <li><code>@subTitulo@</code> - Subtítulo</li>
+        <li><code>@Introduccion@</code> - Introducción del documento</li>
+        <li><code>@Conclusion@</code> - Conclusión del documento</li>
+        <li><code>@parr@</code> - Párrafo de texto</li>
+        <li><code>@linebreak@</code> - Salto de línea</li>
+        <li><code>@pagebreak@</code> - Salto de página</li>
+      </ul>
+      <h2>Notas sobre las Etiquetas de Introducción y Conclusión</h2>
+      <p>
+        Al usar las etiquetas <code>@Introduccion@</code> y <code>@Conclusion@</code>, puedes incluir el símbolo <code>-|</code> para indicar que el texto siguiente debe ser un nuevo párrafo. Esto permite una mejor organización del contenido y facilita la lectura del documento generado.
+      </p>
+    </section>
+    <section class=" preview-container"> 
+        <h2>Ejemplos de Uso de Etiquetas</h2>
+<div class="examples">
+    <div class="example">
+      <h3>Títulos</h3>
+      <pre><code>@titulo1@
+Este es el título principal de mi documento.
+@/titulo1@</code></pre>
+    </div>
+    
+    <div class="example">
+      <h3>Subtítulo</h3>
+      <pre><code>@subTitulo@
+Este es un subtítulo que proporciona más información.
+@/subTitulo@</code></pre>
+    </div>
+    
+    <div class="example">
+      <h3>Introducción</h3>
+      <pre><code>@Introduccion@
+Este es el párrafo de introducción que describe el tema del documento.
+Segundo párrafo de la introducción.
+@/Introduccion@</code></pre>
+    </div>
+    
+    <div class="example">
+      <h3>Párrafo</h3>
+      <pre><code>@parr@
+Este es un párrafo de texto que contiene información relevante.
+@/parr@</code></pre>
+    </div>
+    
+    <div class="example">
+      <h3>Conclusión</h3>
+      <pre><code>@Conclusion@
+Este es el párrafo de conclusión que resume los puntos clave.
+Otro párrafo de la conclusión.
+@/Conclusion@</code></pre>
+    </div>
+    
+    <div class="example">
+      <h3>Salto de Línea</h3>
+      <pre><code>@linebreak@
+3
+@/linebreak@</code></pre>
+    </div>
+    
+    <div class="example">
+      <h3>Salto de Página</h3>
+      <pre><code>@pagebreak@
+@/pagebreak@</code></pre>
+    </div>
+
+</div>
+</section>
+  </main>
+</body>
+</html>

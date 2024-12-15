@@ -125,7 +125,16 @@ button:active {
 .autocomplete-item:hover {
   background-color: #1d1d1d62;
 }
+a {
+  margin: 10px;
+  color: var(--primary-color);
+  font-weight: 500; 
+  transition: color 0.3s ease;
+}
 
+a:hover {
+  color: var(--secondary-color); 
+}
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
