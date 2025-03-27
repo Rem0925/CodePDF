@@ -1,5 +1,6 @@
 const autocompleteContainer = document.getElementById("autocomplete-container");
-let Contenidos = [];
+
+let Save = localStorage.getItem("SAVE") ?? "";
 
 const Lorem = [
   `Lorem ipsum dolor sit amet consectetur, adipiscing elit interdum. 
@@ -18,55 +19,74 @@ perspiciatis sint sapiente doloribus. Consequuntur quasi dolorem obcaecati
 eligendi maiores.`,
 ];
 
+const { jsPDF } = window.jspdf;
+
 const Text_tags = [
   {
     name: "titulo1",
     fontSize: 12,
     fontStyle: "bold",
+    margen: 105,
   },
   {
     name: "subTitulo",
     fontSize: 12,
     fontStyle: "bolditalic",
+    margen: 105,
   },
   {
     name: "titulo2",
     fontSize: 12,
     fontStyle: "bold",
+    margen: 20,
   },
   {
     name: "titulo3",
     fontSize: 12,
     fontStyle: "bolditalic",
+    margen: 20,
   },
   {
     name: "titulo4",
     fontSize: 12,
     fontStyle: "bold",
+    margen: 20,
+    inde: true,
   },
   {
     name: "titulo5",
     fontSize: 12,
     fontStyle: "bolditalic",
+    margen: 20,
+    inde: true,
   },
-  { name: "parr", fontSize: 12, fontStyle: "normal" },
-  
+  { name: "parr", fontSize: 12, fontStyle: "normal", margen: 20, inde: true },
 ];
 const Func_tags = [
   { name: "linebreak" },
   { name: "pagebreak" },
   { name: "Lorem" },
+  { name: "Indice" },
   {
     name: "Introduccion",
     fontSize: 12,
     fontStyle: "normal",
-    fontStyleT: "bold",
+    margen: 20,
+    inde: true,
   },
   {
     name: "Conclusion",
     fontSize: 12,
+    margen: 20,
     fontStyle: "normal",
-    fontStyleT: "bold",
+    inde: true,
+  },
+  {
+    name: "Portada",
+    fontStyle: "bold",
+    fontSize: 12,
+    fontStyle: "bold",
+    margen: 105,
   },
 ];
 
@@ -76,15 +96,8 @@ const all_Tags = Text_tags.concat(Func_tags);
 CodeMirror.defineMode("customTags", function () {
   return {
     token: function (stream) {
-      if (stream.match("-|",true)) {
+      if (stream.match("-|", true)) {
         return "tg";
-      }
-      for (const Line of Contenidos) {
-        if (stream.match(Line, true)) {
-          
-          return "Cont";
-
-        }
       }
       for (const tag of Text_tags) {
         if (stream.match(`@${tag.name}@`, true)) {
@@ -115,12 +128,12 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
   mode: "customTags",
 });
 
+editor.setValue(Save);
+
 function handleKeyUp(event) {
   if (event.key === "Enter") {
     autocompleteContainer.style.display = "none";
-    LineasReco();
   } else {
-    LineasReco();
     filterAutocomplete();
   }
 }
@@ -165,7 +178,6 @@ function insertTag(tag, lastHyphen, cursorPosition) {
     { line: cursorPosition.line, ch: line.length }
   ); // Posicionar el cursor después de la etiqueta
   editor.setCursor(cursorPosition.line + 1, 0);
-  LineasReco();
   autocompleteContainer.style.display = "none"; // Ocultar sugerencias después de insertar
 }
 
@@ -175,38 +187,67 @@ document.addEventListener("click", function () {
   autocompleteContainer.style.display = "none";
 });
 
-function LineasReco() {
-  let Contenido = [];
-  let Lineas = editor.getValue().split("\n");
-  Lineas.forEach((line, index) => {
-    all_Tags.forEach((tag) => {
-      if (line.includes(`@${tag.name}@`)) {
-        let j = 1;
-        while (
-          Lineas[index + j] &&
-          !Lineas[index + j].includes(`@/${tag.name}@`)
-        ) {
-          let Cont = Lineas[index + j].replace("-|"," ");
-          Contenido.push(Cont.trim());
-          j++;
-        }
-      }
-    });
-  });
-  Contenidos = Contenido;
-}
-
 function generatePDF() {
+  Save = localStorage.setItem("SAVE", editor.getValue());
+  indexEntries = [];
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   const margin = 20;
   let y = margin;
   const pageHeight = doc.internal.pageSize.height - (margin + 10);
-  const contentLines = [];
-  let splitText;
-  var Titt = "";
-  let PrinEti = { Intro: false, Conclu: false };
+
+  const contentLines = ProcessText(doc, margin);
+  console.log(contentLines);
+
+  if (Array.isArray(contentLines)) {
+    let currentPageNumber = 1;
+    contentLines.forEach((Pagina, pageIndex) => {
+      if (pageIndex + 1 !== currentPageNumber) {
+        addPageNumber(currentPageNumber);
+        doc.addPage();
+        y = margin;
+        currentPageNumber = pageIndex + 1;
+      }
+      Pagina.forEach((Linea) => {
+        const { line, Y, tag } = Linea;
+        doc.setFontSize(tag.fontSize || 12);
+        doc.setFont("times", tag.fontStyle || "normal");
+        if (y + 10 > pageHeight) {
+          addPageNumber(currentPageNumber);
+          doc.addPage();
+          currentPageNumber++;
+        }
+        doc.text(
+          tag.margen,
+          Y * 10 + 20,
+          line,
+          tag.margen > 20 ? { align: "center" } : {}
+        );
+      });
+    });
+    addPageNumber(currentPageNumber);
+  }
+  addPageNumber(doc.internal.getNumberOfPages());
+  const pdfBlob = doc.output("blob");
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+  const previewFrame = document.getElementById("preview");
+  previewFrame.src = pdfUrl;
+
+  function addPageNumber(pageNumber) {
+    doc.setFontSize(12);
+    doc.text(`${pageNumber}`, doc.internal.pageSize.width - 15, 10, {
+      align: "right",
+    });
+    return pageNumber;
+  }
+}
+
+function ProcessText(doc, margin) {
+  let Textoo = [];
   const lines = editor.getValue().split("\n");
+  const pageWidth = doc.internal.pageSize.width;
+  const usableWidth = pageWidth + 2 * margin;
+
   lines.forEach((line, index) => {
     all_Tags.forEach((tag) => {
       if (line.includes(`@${tag.name}@`)) {
@@ -219,221 +260,337 @@ function generatePDF() {
           tagContent += lines[index + j] + " ";
           j++;
         }
-        contentLines.push({ text: tagContent, tag });
+        const indent = tag.inde ? "           " : "";
+
+        const partes = tagContent.trim().split("-|");
+
+        const objetoPartes = partes.reduce((acc, parte, i) => {
+          acc[`parte${i + 1}`] = indent + parte.trim();
+          return acc;
+        }, {});
+
+        for (let key in objetoPartes) {
+          objetoPartes[key] = doc.splitTextToSize(
+            objetoPartes[key],
+            usableWidth
+          );
+        }
+        Textoo.push({ text: objetoPartes, tag });
       }
     });
   });
+  const organizedPages = organizeTextByPages(
+    Textoo,
+    /*Cantidad de Lineas por Pagina*/ 25,
+    doc
+  );
 
-  for (let index = 0; index < contentLines.length; index++) {
-    switch (contentLines[index].tag.name) {
-      case "Introduccion":
-        if (PrinEti.Intro == false) {
-          if (Titt != "") {
-            Titt = "";
-          }
-          addPageNumber(doc.internal.getNumberOfPages());
-          if (y != margin) {
-            doc.addPage();
-          }
-          y = margin;
-          //Titulo
-          doc.setFontSize(contentLines[index].tag.fontSize);
-          doc.setFont("times", contentLines[index].tag.fontStyleT);
-          doc.text(105,y,"Introduccion",{align:"center"})
-          y +=10; 
-          //Contenido 
-          doc.setFont("times", contentLines[index].tag.fontStyle);
-          let ContenidoLineas = contentLines[index].text.trim().split("-|");
-          ContenidoLineas.forEach((Lineas)=> {
-            splitText = doc.splitTextToSize(
-              "           " + Lineas.trim(),
-              doc.internal.pageSize.width - 2 * margin
-            );
-            splitText.forEach((textLine) => {
-              if (y + 10 > pageHeight) {
-                addPageNumber(doc.internal.getNumberOfPages());
-                doc.addPage();
-                y = margin;
+  return organizedPages;
+}
+function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
+  const pages = [];
+  let currentPage = [];
+  let currentLineCount = 0;
+  let Retraso = { Tx: "", Ln: 1, ParResi: "" };
+
+  Textoo.forEach((item) => {
+    const { text, tag } = item;
+    let OnePagueEtiq = {
+      Intro: false,
+      Indi: false,
+      Conclu: false,
+      Port: false,
+    };
+    Object.values(text).forEach((lines) => {
+      lines.forEach((line) => {
+        if (currentLineCount + 1 > maxLinesPerPage) {
+          pages.push(currentPage);
+          currentPage = [];
+          currentLineCount = 0;
+        }
+        switch (tag.name) {
+          case "Portada":
+            if (!OnePagueEtiq.Port) {
+              if (currentPage.length > 0) {
+                pages.push(currentPage);
               }
-              doc.text(margin, y, textLine, {});
-              y += 10;
+              currentPage = [];
+              currentLineCount = 0;
+
+              const header = text.parte1.toString().split(`.`);
+              const title = text.parte2;
+              const footer = Object.values(text)
+                .slice(2, 9) // Limitar a 7 elementos
+                .map((item) => `${item}`)
+                .join("\n");
+
+              // Add header
+              const headerLines = docc.splitTextToSize(
+                header,
+                docc.internal.pageSize.width - 20
+              );
+              headerLines.forEach((headerLine) => {
+                currentPage.push({
+                  line: headerLine,
+                  Y: currentLineCount + 1,
+                  tag: { fontSize: 12, fontStyle: "normal", margen: 105 },
+                });
+                currentLineCount++;
+              });
+
+              // Add title
+              const titleLines = docc.splitTextToSize(
+                title,
+                docc.internal.pageSize.width - 2 * 20
+              );
+              currentLineCount = 12 - titleLines.length / 2;
+              titleLines.forEach((titleLine) => {
+                currentPage.push({
+                  line: titleLine,
+                  Y: currentLineCount + 1,
+                  tag: { fontSize: 16, fontStyle: "bold", margen: 105 },
+                });
+                currentLineCount++;
+              });
+              // Add footer
+              const footerLines = docc.splitTextToSize(footer, 60);
+              let footerY =
+                docc.internal.pageSize.height -
+                2 * 20 -
+                footerLines.length * 10;
+              footerLines.forEach((footerLine) => {
+                currentPage.push({
+                  line: footerLine,
+                  Y: footerY / 10,
+                  tag: {
+                    fontSize: 12,
+                    fontStyle: "normal",
+                    margen: docc.internal.pageSize.width - 2 * 20,
+                    align: "right",
+                  },
+                });
+                footerY += 10;
+              });
+
+              OnePagueEtiq.Port = true;
+              pages.push(currentPage);
+              currentPage = [];
+              currentLineCount = 0;
+            }
+            break;
+          case "Indice":
+            if (currentPage.length > 0) {
+              pages.push(currentPage);
+            }
+            currentPage = [];
+            currentLineCount = 0;
+            // Reservamos una página placeholder para el índice
+            const indexPlaceholder = [
+              {
+                line: "%%INDEX_PLACEHOLDER%%",
+                Y: 1,
+                tag: { fontSize: 16, fontStyle: "bold", margen: 105 },
+              },
+            ];
+            pages.push(indexPlaceholder);
+            currentPage = [];
+            currentLineCount = 0;
+            break;
+          case "titulo4":
+          case "titulo5":
+            line += ".";
+            currentPage.push({ line, Y: currentLineCount + 1, tag });
+            indexEntries.push({
+              title: line.slice(0, -1).trim(),
+              page: pages.length + 1,
+              level: 3,
             });
-          });
-          addPageNumber(doc.internal.getNumberOfPages());
-          doc.addPage();
-          y = margin;
-          PrinEti.Intro = true;
-        }
-        break;
-      case "titulo1":
-      case "subTitulo":
-        if (Titt != "") {
-          y += 10;
-          Titt = "";
-        }
-        doc.setFontSize(contentLines[index].tag.fontSize);
-        doc.setFont("times", contentLines[index].tag.fontStyle);
-        splitText = doc.splitTextToSize(
-          contentLines[index].text.trim(),
-          doc.internal.pageSize.width - 2 * margin
-        );
-        splitText.forEach((textLine) => {
-          if (y + 10 > pageHeight) {
-            addPageNumber(doc.internal.getNumberOfPages());
-            doc.addPage();
-            y = margin;
-          }
-          doc.text(105, y, textLine, { align: "center" });
-          y += 10;
-        });
-        break;
-      case "titulo2":
-      case "titulo3":
-        if (Titt != "") {
-          y += 10;
-          Titt = "";
-        }
-        doc.setFontSize(contentLines[index].tag.fontSize);
-        doc.setFont("times", contentLines[index].tag.fontStyle);
-        splitText = doc.splitTextToSize(
-          contentLines[index].text.trim(),
-          doc.internal.pageSize.width - 2 * margin
-        );
-        splitText.forEach((textLine) => {
-          if (y + 10 > pageHeight) {
-            addPageNumber(doc.internal.getNumberOfPages());
-            doc.addPage();
-            y = margin;
-          }
-          doc.text(margin, y, textLine, {});
-          y += 10;
-        });
-        break;
-      case "titulo4":
-      case "titulo5":
-        if (Titt != "") {
-          y += 10;
-          Titt = "";
-        }
-
-        doc.setFontSize(contentLines[index].tag.fontSize);
-        doc.setFont("times", contentLines[index].tag.fontStyle);
-        splitText = doc.splitTextToSize(
-          contentLines[index].text.trim(),
-          doc.internal.pageSize.width - 2 * margin
-        );
-        Titt = splitText[0];
-        splitText.forEach((textLine) => {
-          if (y + 10 > pageHeight) {
-            addPageNumber(doc.internal.getNumberOfPages());
-            doc.addPage();
-            y = margin;
-          }
-          doc.text(margin, y, "           " + textLine + ".", {});
-        });
-        break;
-      case "parr":
-        doc.setFontSize(contentLines[index].tag.fontSize);
-        doc.setFont("times", contentLines[index].tag.fontStyle);
-        const initialIndent = Titt
-          ? "           " +
-            " ".repeat(
-              Math.ceil(doc.getTextWidth(Titt) * 1.2) -
-                Math.ceil(doc.getTextWidth(Titt) * 1.2 * 0.1)
-            )
-          : "           ";
-
-        splitText = doc.splitTextToSize(
-          initialIndent + contentLines[index].text.trim(),
-          doc.internal.pageSize.width - 2 * margin
-        );
-        splitText.forEach((textLine) => {
-          if (y + 10 > pageHeight) {
-            addPageNumber(doc.internal.getNumberOfPages());
-            doc.addPage();
-            y = margin;
-          }
-          doc.text(margin, y, textLine, {});
-          y += 10;
-        });
-        Titt = "";
-        break;
-      case "linebreak":
-        if (Titt != "") {
-          Titt = "";
-        }
-        num = Number(contentLines[index].text);
-        console.log(num);
-        for (let index = 0; index < num; index++) {
-          y += 10;
-        }
-        if (y + 10 > pageHeight) {
-          addPageNumber(doc.internal.getNumberOfPages());
-          doc.addPage();
-          y = margin;
-        }
-        break;
-      case "pagebreak":
-        if (Titt != "") {
-          Titt = "";
-        }
-        doc.addPage();
-        y = margin;
-        break;
-      default:
-        break;
-        case "Conclusion":
-        if (PrinEti.Conclu == false) {
-          if (Titt != "") {
-            Titt = "";
-          }
-          addPageNumber(doc.internal.getNumberOfPages());
-          if (y != margin) {
-            doc.addPage();
-          }
-          y = margin;
-          //Titulo
-          doc.setFontSize(contentLines[index].tag.fontSize);
-          doc.setFont("times", contentLines[index].tag.fontStyleT);
-          doc.text(105,y,"Conclusion",{align:"center"})
-          y +=10; 
-          //Contenido 
-          doc.setFont("times", contentLines[index].tag.fontStyle);
-          let ContenidoLineas = contentLines[index].text.trim().split("-|");
-          ContenidoLineas.forEach((Lineas)=> {
-            splitText = doc.splitTextToSize(
-              "           " + Lineas.trim(),
-              doc.internal.pageSize.width - 2 * margin
-            );
-            splitText.forEach((textLine) => {
-              if (y + 10 > pageHeight) {
-                addPageNumber(doc.internal.getNumberOfPages());
-                doc.addPage();
-                y = margin;
+            Retraso.Ln = 2;
+            Retraso.Tx = line;
+            break;
+          case "parr":
+            //Corregir error de la ultima linea---------------------------------------------------------
+            if (Retraso.ParResi) {
+              let Split = Retraso.ParResi.toString() + " " + line;
+              if (
+                docc.getTextWidth(Retraso.ParResi) <
+                docc.internal.pageSize.width + 40
+              ) {
+                let splitText = docc.splitTextToSize(
+                  Split,
+                  docc.internal.pageSize.width + 40
+                );
+                Split = splitText[0];
+                Retraso.ParResi = splitText.slice(1).join(" ");
+                line = "";
               }
-              doc.text(margin, y, textLine, {});
-              y += 10;
+              currentPage.push({ line: Split, Y: currentLineCount + 1, tag });
+              currentLineCount++;
+            }
+            if (Retraso.Tx) {
+              const initialIndent = " ".repeat(
+                Math.ceil(
+                  (docc.getTextWidth(Retraso.Tx.trim()) * 1.2) /
+                    docc.getTextWidth(" ")
+                )
+              );
+              line = initialIndent + line;
+              let splitText = docc.splitTextToSize(
+                line,
+                docc.internal.pageSize.width + 40
+              );
+              Retraso.Tx = "";
+              Retraso.ParResi = splitText.slice(1).join(" ");
+              line = splitText[0];
+            }
+            if (line !== "") {
+              currentPage.push({ line, Y: currentLineCount + 1, tag });
+              currentLineCount++;
+            }
+            break;
+          case "Introduccion":
+            if (!OnePagueEtiq.Intro) {
+              if (currentPage.length > 0) {
+                pages.push(currentPage);
+              }
+              currentPage = [];
+              currentLineCount = 0;
+              currentPage.push({
+                line: "Introduccion",
+                Y: currentLineCount + 1,
+                tag: {
+                  fontSize: 12,
+                  fontStyle: "bold",
+                  margen: 105,
+                  name: "Introduccion",
+                },
+              });
+              currentLineCount++;
+              indexEntries.push({
+                title: "Introduccion",
+                page: pages.length + 1,
+                level : 1,
+              });
+            }
+            OnePagueEtiq.Intro = true;
+            currentPage.push({ line, Y: currentLineCount + 1, tag });
+            currentLineCount++;
+            let $item2 = Textoo[Textoo.indexOf(item)];
+            let Ultimo2 =
+              $item2.text[
+                Object.keys($item2.text)[Object.keys($item2.text).length - 1]
+              ];
+            if (Ultimo2[Ultimo2.length - 1] == line) {
+              pages.push(currentPage);
+              currentPage = [];
+              currentLineCount = 0;
+            }
+            break;
+          case "Conclusion":
+            if (!OnePagueEtiq.Conclu) {
+              if (currentPage.length > 0) {
+                pages.push(currentPage);
+              }
+              currentPage = [];
+              currentLineCount = 0;
+              currentPage.push({
+                line: "Conclusión",
+                Y: currentLineCount + 1,
+                tag: {
+                  fontSize: 12,
+                  fontStyle: "bold",
+                  margen: 105,
+                  name: "Conclusion",
+                },
+              });
+              currentLineCount++;
+              indexEntries.push({
+                title: "Conclusión",
+                page: pages.length + 1,
+                level : 1,
+              });
+            }
+            OnePagueEtiq.Conclu = true;
+            currentPage.push({ line, Y: currentLineCount + 1, tag });
+            currentLineCount++;
+            let $item = Textoo[Textoo.indexOf(item)];
+            let Ultimo =
+              $item.text[
+                Object.keys($item.text)[Object.keys($item.text).length - 1]
+              ];
+            if (Ultimo[Ultimo.length - 1] == line) {
+              pages.push(currentPage);
+              currentPage = [];
+              currentLineCount = 0;
+            }
+            break;
+          case "linebreak":
+            currentLineCount += line ? Number(line) : 1;
+            break;
+          case "pagebreak":
+            pages.push(currentPage);
+            currentPage = [];
+            currentLineCount = 0;
+            break;
+          case 'titulo2':
+          case 'titulo3':
+            //Arreglar error de que si el titulo es de mas de una linea, se sobre pone 
+            currentLineCount += Retraso.Ln;
+            currentPage.push({ line, Y: currentLineCount, tag });
+            indexEntries.push({
+              title: line.slice(0, -1),
+              page: pages.length + 1,
+              level : 2,
             });
-          });
-          addPageNumber(doc.internal.getNumberOfPages());
-          doc.addPage();
-          y = margin;
-          PrinEti.Conclu = true;
+            Retraso.Ln = 1;
+            break;
+          default:
+            currentLineCount += Retraso.Ln;
+            currentPage.push({ line, Y: currentLineCount, tag });
+            indexEntries.push({
+              title: line.slice(0, -1),
+              page: pages.length + 1,
+              level : 1,
+            });
+            Retraso.Ln = 1;
+            break;
         }
-        break;
+      });
+    });
+  });
+  if (currentPage.length > 0) {
+    pages.push(currentPage);
+  }
+  return AggIndice(pages, docc);
+}
+function AggIndice(pages,doc) {
+  // Se construye la página de índice usando las entradas acumuladas en indexEntries
+  const newIndexPage = [];
+  newIndexPage.push({
+    line: "Índice",
+    Y: 1,
+    tag: { fontSize: 16, fontStyle: "bold", margen: 105 },
+  });
+  let yCounter = 2;
+  indexEntries.forEach((entry) => {
+    const dots = doc.splitTextToSize(
+      (entry.level === 1 ? '' : entry.level === 2 ? '           ' : '                      ') + entry.title + "......".repeat(28),
+      doc.internal.pageSize.width + 40
+    );
+    dots[0] += entry.page;
+    newIndexPage.push({
+      line: `${dots[0]}`,
+      Y: yCounter,
+      tag: { fontSize: 12, fontStyle: "normal", margen: 20 },
+    });
+    yCounter++;
+  });
+  // Buscamos el placeholder y lo reemplazamos por el contenido del índice
+  for (let i = 0; i < pages.length; i++) {
+    if (pages[i].length > 0 && pages[i][0].line === "%%INDEX_PLACEHOLDER%%") {
+      pages[i] = newIndexPage;
+      break;
     }
   }
-  addPageNumber(doc.internal.getNumberOfPages());
-
-  const pdfBlob = doc.output("blob");
-  const pdfUrl = URL.createObjectURL(pdfBlob);
-  const previewFrame = document.getElementById("preview");
-  previewFrame.src = pdfUrl;
-
-  function addPageNumber(pageNumber) {
-    doc.setFontSize(12);
-    doc.text(`${pageNumber}`, doc.internal.pageSize.width - 15, 10, {
-      align: "right",
-    });
-  }
+  return pages;
 }
