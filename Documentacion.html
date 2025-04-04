@@ -1,137 +1,1533 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guía de Uso - Editor de Código</title>
-  <link rel="stylesheet" href="style/styleDoc.css" />
-</head>
-<body>
-  <header>
-    <h1>Guía de Uso del Editor de Código</h1>
-  </header>
-  <main class="container">
-    <section class="intro editor-container">
-      <h2>¿Qué es este editor?</h2>
-      <p>Este editor de código permite crear documentos PDF aplicando las normas APA utilizando etiquetas.</p>
-    </section>
-    <section class="instructions editor-container">
-      <h2>Instrucciones de Uso</h2>
-      <ol>
-        <li>
-          <strong>Escribe tu contenido:</strong> Utiliza las etiquetas personalizadas para estructurar tu documento. Por ejemplo, usa <code>@titulo1@</code> para un título principal.
-        </li>
-        <li>
-          <strong>Inserta contenido:</strong> Puedes insertar texto de ejemplo utilizando la etiqueta <code>@Lorem@</code>.
-        </li>
-        <li>
-          <strong>Genera el PDF:</strong> Haz clic en el botón "Generar PDF" para crear tu documento en formato PDF.
-        </li>
-        <li>
-          <strong>Visualiza el PDF:</strong> El PDF generado se mostrará en un marco de vista previa.
-        </li>
-      </ol>
-    </section>
-    <section class="autocomplete editor-container">
-      <h2>Funcionamiento del Autocompletado</h2>
-      <p>El autocompletado en el editor de código funciona de la siguiente manera:</p>
-      <ol>
-        <li>
-          <strong>Detección de Guion:</strong> Cuando el usuario escribe un guion (<code>-</code>), el editor activa la función de autocompletado.
-        </li>
-        <li>
-          <strong>Filtrado de Etiquetas:</strong> El editor filtra las etiquetas disponibles basándose en lo que el usuario ha escrito después del guion.
-        </li>
-        <li>
-          <strong>Sugerencias:</strong> Se muestran sugerencias en un contenedor de autocompletado, permitiendo al usuario seleccionar la etiqueta deseada.
-        </li>
-        <li>
-          <strong>Inserción de Etiquetas:</strong> Al hacer clic en una sugerencia, la etiqueta se inserta en el texto.
-        </li>
-      </ol>
-      <h3>Ejemplo de Autocompletado</h3>
-      <p>Si el usuario escribe <code>-ti</code>, el editor podría mostrar las siguientes sugerencias:</p>
-      <ul>
-        <li><code>titulo1</code></li>
-        <li><code>titulo2</code></li>
-        <li><code>subTitulo</code></li>
-        <li>etc...</li>
-      </ul>
-      <p>Al seleccionar <code>titulo1</code>, el texto se convierte en:</p>
-      <pre><code>@titulo1@
-@/titulo1@</code></pre>
-    </section>
-    <section class="tags editor-container">
-      <h2>Etiquetas</h2>
-      <ul>
-        <li><code>@titulo1-2-3-4-5@</code> - Título principal y demás niveles de títulos</li>
-        <li><code>@subTitulo@</code> - Subtítulo</li>
-        <li><code>@Introduccion@</code> - Introducción del documento</li>
-        <li><code>@Conclusion@</code> - Conclusión del documento</li>
-        <li><code>@parr@</code> - Párrafo de texto</li>
-        <li><code>@linebreak@</code> - Salto de línea</li>
-        <li><code>@pagebreak@</code> - Salto de página</li>
-      </ul>
-      <h2>Notas sobre las Etiquetas de Introducción y Conclusión</h2>
-      <p>
-        Al usar las etiquetas <code>@Introduccion@</code> y <code>@Conclusion@</code>, puedes incluir el símbolo <code>-|</code> para indicar que el texto siguiente debe ser un nuevo párrafo. Esto permite una mejor organización del contenido y facilita la lectura del documento generado.
-      </p>
-    </section>
-    <section class=" preview-container"> 
-        <h2>Ejemplos de Uso de Etiquetas</h2>
-<div class="examples">
-    <div class="example">
-      <h3>Títulos</h3>
-      <pre><code>@titulo1@
-Este es el título principal de mi documento.
-@/titulo1@</code></pre>
-    </div>
-    
-    <div class="example">
-      <h3>Subtítulo</h3>
-      <pre><code>@subTitulo@
-Este es un subtítulo que proporciona más información.
-@/subTitulo@</code></pre>
-    </div>
-    
-    <div class="example">
-      <h3>Introducción</h3>
-      <pre><code>@Introduccion@
-Este es el párrafo de introducción que describe el tema del documento.
-Segundo párrafo de la introducción.
-@/Introduccion@</code></pre>
-    </div>
-    
-    <div class="example">
-      <h3>Párrafo</h3>
-      <pre><code>@parr@
-Este es un párrafo de texto que contiene información relevante.
-@/parr@</code></pre>
-    </div>
-    
-    <div class="example">
-      <h3>Conclusión</h3>
-      <pre><code>@Conclusion@
-Este es el párrafo de conclusión que resume los puntos clave.
-Otro párrafo de la conclusión.
-@/Conclusion@</code></pre>
-    </div>
-    
-    <div class="example">
-      <h3>Salto de Línea</h3>
-      <pre><code>@linebreak@
-3
-@/linebreak@</code></pre>
-    </div>
-    
-    <div class="example">
-      <h3>Salto de Página</h3>
-      <pre><code>@pagebreak@
-@/pagebreak@</code></pre>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guía de Usuario - Generador de Documentos PDF</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css"
+    />
+    <link rel="stylesheet" href="style/styledoc.css">
+  </head>
+  <body>
+    <!-- Hero Section -->
+    <header class="hero-section">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h1 class="hero-title">
+              Guía de Usuario: Generador de Documentos PDF
+            </h1>
+            <p class="hero-subtitle mt-3">
+              Una herramienta para crear documentos PDF
+              con un editor de código personalizado
+            </p>
+          </div>
+          <div class="col-lg-4 text-center">
+            <i class="fas fa-file-pdf fa-6x text-white opacity-75 "></i>
+          </div>
+        </div>
+      </div>
+    </header>
 
-</div>
-</section>
-  </main>
-</body>
+    <!-- Main Content -->
+    <main class="container">
+      <div class="row">
+        <!-- Sidebar / Table of Contents -->
+        <div class="col-lg-3 d-none d-lg-block">
+          <div class="toc-container card">
+            <div class="card-header">Contenido</div>
+            <div class="card-body p-0">
+              <nav id="toc">
+                <a href="#introduction" class="toc-link">1. Introducción</a>
+                <a href="#interface" class="toc-link">2. Interfaz de Usuario</a>
+                <a href="#how-to-use" class="toc-link">3. Cómo Utilizar</a>
+                <a href="#tags-text" class="toc-link">4. Etiquetas de Texto</a>
+                <a href="#tags-func" class="toc-link"
+                  >5. Etiquetas de Función</a
+                >
+                <a href="#autocomplete" class="toc-link">6. Autocompletado</a>
+                <a href="#generate-pdf" class="toc-link"
+                  >7. Generación de PDF</a
+                >
+                <a href="#examples" class="toc-link">8. Ejemplos Prácticos</a>
+                <a href="#tips" class="toc-link">9. Consejos y Trucos</a>
+                <a href="#troubleshooting" class="toc-link"
+                  >10. Solución de Problemas</a
+                >
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="col-lg-9">
+          <!-- Introduction Section -->
+          <section id="introduction">
+            <h2 class="section-title">Introducción</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  ¡Bienvenido a la guía de usuario del Generador de Documentos
+                  PDF! Esta herramienta te permite crear documentos PDF
+                  profesionales a través de un editor de código personalizado
+                  con etiquetas específicas.
+                </p>
+
+                <p>
+                  El generador ha sido diseñado para facilitar la creación de
+                  documentos estructurados, informes académicos, manuales y
+                  cualquier tipo de documento que requiera un formato
+                  consistente y profesional.
+                </p>
+
+                <h4 class="mt-4 mb-3">Características principales:</h4>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="feature-icon">
+                      <i class="fas fa-tags"></i>
+                    </div>
+                    <h5 class="feature-title">Sistema de etiquetas</h5>
+                    <p>
+                      Utiliza etiquetas personalizadas para definir el formato y
+                      la estructura del documento.
+                    </p>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="feature-icon">
+                      <i class="fas fa-keyboard"></i>
+                    </div>
+                    <h5 class="feature-title">Autocompletado</h5>
+                    <p>
+                      Sistema inteligente que sugiere etiquetas mientras
+                      escribes para agilizar el proceso.
+                    </p>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="feature-icon">
+                      <i class="fas fa-file-export"></i>
+                    </div>
+                    <h5 class="feature-title">Generación instantánea</h5>
+                    <p>
+                      Convierte tu código en un PDF profesional con un solo
+                      clic.
+                    </p>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="feature-icon">
+                      <i class="fas fa-save"></i>
+                    </div>
+                    <h5 class="feature-title">Guardado automático</h5>
+                    <p>
+                      Tus documentos se guardan automáticamente para que nunca
+                      pierdas tu trabajo.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Interface Overview Section -->
+          <section id="interface" class="mt-5">
+            <h2 class="section-title">Interfaz de Usuario</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  La interfaz del generador está dividida en dos áreas
+                  principales: el editor de código y la vista previa del PDF.
+                </p>
+
+                <div class="image-container">
+                  <img
+                    src="https://via.placeholder.com/800x450?text=Interfaz+del+Generador+de+PDF"
+                    alt="Interfaz del Generador de PDF"
+                    class="img-fluid screen-image"
+                  />
+                </div>
+
+                <h4 class="mt-4 mb-3">Componentes principales:</h4>
+
+                <ol class="steps-container">
+                  <li class="step-item">
+                    <h5 class="step-title">Editor de código</h5>
+                    <p>
+                      Área principal donde escribirás tu documento utilizando
+                      etiquetas personalizadas. El editor cuenta con resaltado
+                      de sintaxis para facilitar la visualización de las
+                      etiquetas.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Panel de autocompletado</h5>
+                    <p>
+                      Aparece al escribir "-" seguido de texto, mostrando
+                      sugerencias de etiquetas disponibles.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Botón de generación</h5>
+                    <p>
+                      El botón "Generar Documento" procesa el código y crea el
+                      PDF con el formato especificado.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Vista previa</h5>
+                    <p>
+                      Área donde se muestra el PDF generado para su revisión
+                      inmediata.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Notificaciones</h5>
+                    <p>
+                      Mensajes de éxito o error que aparecen en la parte
+                      superior para informar sobre el estado del proceso.
+                    </p>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <!-- How to Use Section -->
+          <section id="how-to-use" class="mt-5">
+            <h2 class="section-title">Cómo Utilizar</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  El uso básico del generador de documentos consiste en escribir
+                  contenido utilizando etiquetas especiales que definen el
+                  formato y la estructura del documento final.
+                </p>
+
+                <h4 class="mt-4 mb-3">Pasos básicos:</h4>
+
+                <ol class="steps-container">
+                  <li class="step-item">
+                    <h5 class="step-title">
+                      Planifica la estructura de tu documento
+                    </h5>
+                    <p>
+                      Antes de comenzar, planifica qué secciones necesitará tu
+                      documento (portada, índice, introducción, capítulos,
+                      conclusión, etc.).
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Comienza con una portada</h5>
+                    <p>
+                      Utiliza la etiqueta
+                      <code class="code-tag">@Portada@</code> para crear una
+                      portada profesional para tu documento.
+                    </p>
+                    <div class="example-code">
+                      <pre><span class="tag-highlight">@Portada@</span>
+<span class="tag-txt">
+Universidad Autónoma
+<span class="tag-content">-|</span>
+Título del Documento
+<span class="tag-content">-|</span>
+Autor: Juan Pérez
+<span class="tag-content">-|</span>
+Fecha: Mayo 2025
+</span>
+<span class="tag-content">-|</span>
+<span class="tag-highlight">@/Portada@</span></pre>
+                    </div>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Agrega un índice</h5>
+                    <p>
+                      El índice se genera automáticamente cuando usas la
+                      etiqueta <code class="code-tag">@Indice@</code>. Incluirá
+                      todas las secciones principales con sus números de página.
+                    </p>
+                    <div class="example-code">
+                      <pre><span class="function-highlight">@Indice@</span>
+<span class="function-highlight">@/Indice@</span></pre>
+                    </div>
+                  </li>
+                  <li class="step-item">
+                    <h5 class="step-title">Escribe la introducción</h5>
+                    <p>
+                      Usa la etiqueta
+                      <code class="code-tag">@Introduccion@</code> para la
+                      sección introductoria.
+                    </p>
+                    <div class="example-code">
+                      <pre><span class="function-highlight">@Introduccion@</span>
+<span class="tag-txt">Este documento tiene como objetivo...</span>
+<span class="function-highlight">@/Introduccion@</span></pre>
+                    </div>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">
+                      Desarrolla el contenido principal
+                    </h5>
+                    <p>
+                      Utiliza las etiquetas de títulos y párrafos para organizar
+                      el contenido principal.
+                    </p>
+                    <div class="example-code">
+                      <pre><span class="tag-highlight">@titulo1@</span>
+<span class="tag-txt">Capítulo 1: Fundamentos
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="tag-highlight">@titulo2@</span>
+1.1 Conceptos básicos
+<span class="tag-highlight">@/titulo2@</span>
+
+<span class="tag-highlight">@parr@</span>
+En esta sección analizaremos los conceptos fundamentales...</span>
+<span class="tag-highlight">@/parr@</span></pre>
+                    </div>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Finaliza con una conclusión</h5>
+                    <p>
+                      Termina tu documento con una conclusión usando la etiqueta
+                      <code class="code-tag">@Conclusion@</code>.
+                    </p>
+                    <div class="example-code">
+                      <pre><span class="function-highlight">@Conclusion@</span>
+<span class="tag-txt">En resumen, este documento ha presentado...</span>
+<span class="function-highlight">@/Conclusion@</span></pre>
+                    </div>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Genera el PDF</h5>
+                    <p>
+                      Haz clic en el botón "Generar Documento" para crear el PDF
+                      final con todo el formato aplicado.
+                    </p>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <!-- Text Tags Section -->
+          <section id="tags-text" class="mt-5">
+            <h2 class="section-title">Etiquetas de Texto</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  Las etiquetas de texto definen el formato y la jerarquía del
+                  contenido en el documento. Cada etiqueta tiene propiedades
+                  específicas como tamaño de fuente, estilo y márgenes.
+                </p>
+
+                <div class="table-responsive mt-4">
+                  <table class="table table-bordered table-dark">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Etiqueta</th>
+                        <th>Descripción</th>
+                        <th>Propiedades</th>
+                        <th>Uso recomendado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code class="code-tag">@titulo1@</code></td>
+                        <td>Título principal</td>
+                        <td>Tamaño: 12pt, Estilo: Negrita, Margen: Centrado</td>
+                        <td>Títulos de capítulos o secciones principales</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@subTitulo@</code></td>
+                        <td>Subtítulo principal</td>
+                        <td>
+                          Tamaño: 12pt, Estilo: Negrita cursiva, Margen:
+                          Centrado
+                        </td>
+                        <td>Subtítulos de secciones principales</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@titulo2@</code></td>
+                        <td>Título secundario</td>
+                        <td>
+                          Tamaño: 12pt, Estilo: Negrita, Margen: Izquierda
+                        </td>
+                        <td>Subsecciones dentro de un capítulo</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@titulo3@</code></td>
+                        <td>Título terciario</td>
+                        <td>
+                          Tamaño: 12pt, Estilo: Negrita cursiva, Margen:
+                          Izquierda
+                        </td>
+                        <td>Subsecciones menores</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@titulo4@</code></td>
+                        <td>Título cuaternario</td>
+                        <td>
+                          Tamaño: 12pt, Estilo: Negrita, Margen: Izquierda,
+                          Indentado
+                        </td>
+                        <td>Subsecciones de nivel 4</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@titulo5@</code></td>
+                        <td>Título de quinto nivel</td>
+                        <td>
+                          Tamaño: 12pt, Estilo: Negrita cursiva, Margen:
+                          Izquierda, Indentado
+                        </td>
+                        <td>Subsecciones de nivel 5</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@parr@</code></td>
+                        <td>Párrafo</td>
+                        <td>
+                          Tamaño: 12pt, Estilo: Normal, Margen: Izquierda,
+                          Indentado
+                        </td>
+                        <td>Texto principal del documento</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="tips-box mt-4">
+                  <h5><i class="fas fa-lightbulb me-2"></i> Consejo</h5>
+                  <p>
+                    Mantén una estructura jerárquica coherente en tu documento.
+                    Por ejemplo, después de un
+                    <code class="code-tag">@titulo1@</code>, usa
+                    <code class="code-tag">@titulo2@</code> para subsecciones, y
+                    no saltes directamente a
+                    <code class="code-tag">@titulo4@</code>.
+                  </p>
+                </div>
+
+                <h4 class="mt-4 mb-3">Ejemplo de uso:</h4>
+                <div class="example-code">
+                  <pre><span class="tag-highlight">@titulo1@</span>
+<span class="tag-txt">Marco Teórico
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="tag-highlight">@titulo2@</span>
+2.1 Antecedentes
+<span class="tag-highlight">@/titulo2@</span>
+
+<span class="tag-highlight">@parr@</span>
+En esta sección se presentan los antecedentes históricos del tema de estudio.
+Este párrafo continúa con más información relevante sobre los antecedentes.
+<span class="tag-highlight">@/parr@</span>
+
+<span class="tag-highlight">@titulo3@</span>
+2.1.1 Estudios previos
+<span class="tag-highlight">@/titulo3@</span>
+
+<span class="tag-highlight">@parr@</span>
+Varios autores han abordado esta temática desde diferentes perspectivas.</span>
+<span class="tag-highlight">@/parr@</span></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Function Tags Section -->
+          <section id="tags-func" class="mt-5">
+            <h2 class="section-title">Etiquetas de Función</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  Las etiquetas de función controlan el comportamiento del
+                  documento y permiten añadir elementos especiales como saltos
+                  de página, texto de ejemplo, o secciones predefinidas.
+                </p>
+
+                <div class="table-responsive mt-4">
+                  <table class="table table-bordered table-dark">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Etiqueta</th>
+                        <th>Descripción</th>
+                        <th>Uso</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code class="code-tag">@linebreak@</code></td>
+                        <td>Inserta uno o más saltos de línea</td>
+                        <td>Para añadir espacio vertical entre elementos</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@pagebreak@</code></td>
+                        <td>Inserta un salto de página</td>
+                        <td>Para comenzar una nueva página</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@Lorem@</code></td>
+                        <td>Inserta texto Lorem Ipsum aleatorio</td>
+                        <td>
+                          Para generar contenido de relleno en etapas de diseño
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@Indice@</code></td>
+                        <td>Genera automáticamente un índice del documento</td>
+                        <td>Para incluir una tabla de contenido</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@Introduccion@</code></td>
+                        <td>Define la sección de introducción</td>
+                        <td>Para la introducción del documento</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@Conclusion@</code></td>
+                        <td>Define la sección de conclusión</td>
+                        <td>Para la conclusión del documento</td>
+                      </tr>
+                      <tr>
+                        <td><code class="code-tag">@Portada@</code></td>
+                        <td>Crea una portada formateada</td>
+                        <td>Para la primera página del documento</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="warning-box mt-4">
+                  <h5>
+                    <i class="fas fa-exclamation-triangle me-2"></i> Importante
+                  </h5>
+                  <p>
+                    Las etiquetas <code class="code-tag">@Indice@</code>,
+                    <code class="code-tag">@Introduccion@</code>,
+                    <code class="code-tag">@Conclusion@</code> y
+                    <code class="code-tag">@Portada@</code> generan
+                    automáticamente páginas completas, por lo que deberían
+                    usarse de forma independiente y no dentro de otras
+                    secciones.
+                  </p>
+                </div>
+
+                <h4 class="mt-4 mb-3">Ejemplo de uso:</h4>
+                <div class="example-code">
+                  <pre><span class="function-highlight">@Portada@</span>
+<span class="tag-txt">Universidad Nacional
+<span class="tag-content">-|</span>
+Análisis de datos económicos
+<span class="tag-content">-|</span>
+Autor: María Rodríguez
+<span class="tag-content">-|</span>
+Fecha: Junio 2023
+<span class="function-highlight">@/Portada@</span>
+
+<span class="function-highlight">@Indice@</span>
+<span class="function-highlight">@/Indice@</span>
+
+<span class="function-highlight">@Introduccion@</span>
+Este trabajo analiza las tendencias económicas recientes...
+<span class="function-highlight">@/Introduccion@</span>
+
+<span class="tag-highlight">@titulo1@</span>
+Metodología
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="function-highlight">@pagebreak@</span>
+<span class="function-highlight">@/pagebreak@</span>
+
+<span class="tag-highlight">@titulo1@</span>
+Resultados
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="function-highlight">@Conclusion@</span>
+En conclusión, los datos analizados muestran...</span>
+<span class="function-highlight">@/Conclusion@</span></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Autocomplete Section -->
+          <section id="autocomplete" class="mt-5">
+            <h2 class="section-title">Autocompletado</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  El editor cuenta con una función de autocompletado que te
+                  ayuda a insertar etiquetas rápidamente mientras escribes.
+                </p>
+
+                <div class="image-container">
+                  <img
+                    src="https://via.placeholder.com/800x300?text=Ejemplo+de+Autocompletado"
+                    alt="Ejemplo de autocompletado"
+                    class="img-fluid screen-image"
+                  />
+                </div>
+
+                <h4 class="mt-4 mb-3">Cómo usar el autocompletado:</h4>
+
+                <ol class="steps-container">
+                  <li class="step-item">
+                    <h5 class="step-title">Activa el autocompletado</h5>
+                    <p>
+                      Escribe un guion seguido de cualquier letra
+                      <code>-t</code> para comenzar a buscar etiquetas que
+                      contengan "t".
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Navega por las sugerencias</h5>
+                    <p>
+                      Aparecerá una lista con las etiquetas que coincidan con lo
+                      que has escrito. Puedes seguir escribiendo para filtrar
+                      más la lista.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Selecciona una etiqueta</h5>
+                    <p>
+                      Haz clic en la etiqueta deseada de la lista.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Inserción automática</h5>
+                    <p>
+                      La etiqueta se insertará automáticamente en tu código con
+                      las etiquetas de apertura y cierre, excepto en el caso de
+                      <code class="code-tag">@Lorem@</code> que inserta
+                      directamente texto de ejemplo.
+                    </p>
+                  </li>
+                </ol>
+
+                <div class="tips-box mt-4">
+                  <h5><i class="fas fa-lightbulb me-2"></i> Consejo</h5>
+                  <p>
+                    Puedes usar la función de autocompletado incluso en medio de
+                    una línea. Simplemente escribe <code>-</code> seguido de las
+                    primeras letras de la etiqueta que necesitas.
+                  </p>
+                </div>
+
+                <h4 class="mt-4 mb-3">Ejemplo de uso:</h4>
+                <div class="example-code">
+                  <pre>Comenzaré escribiendo una introducción:
+
+-Intro<span class="tag-txt">[Aparecerá sugerencia de @Introduccion@]</span>
+
+<span class="function-highlight">@Introduccion@</span>
+<span class="tag-txt">Este documento analiza...</span>
+<span class="function-highlight">@/Introduccion@</span>
+
+Ahora agregaré un párrafo:
+
+-p<span class="tag-txt">[Aparecerá sugerencia de @parr@]</span>
+
+<span class="tag-highlight">@parr@</span>
+<span class="tag-txt">Este es el contenido del párrafo.</span>
+<span class="tag-highlight">@/parr@</span></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Generate PDF Section -->
+          <section id="generate-pdf" class="mt-5">
+            <h2 class="section-title">Generación de PDF</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  Una vez que hayas escrito tu documento utilizando las
+                  etiquetas adecuadas, puedes generar el PDF final con un solo
+                  clic.
+                </p>
+
+                <div class="image-container">
+                  <img
+                    src="https://via.placeholder.com/800x450?text=Proceso+de+Generación+de+PDF"
+                    alt="Proceso de generación de PDF"
+                    class="img-fluid screen-image"
+                  />
+                </div>
+
+                <h4 class="mt-4 mb-3">Proceso de generación:</h4>
+
+                <ol class="steps-container">
+                  <li class="step-item">
+                    <h5 class="step-title">Revisa tu documento</h5>
+                    <p>
+                      Antes de generar el PDF, asegúrate de que todas las
+                      etiquetas estén correctamente cerradas y que la estructura
+                      sea coherente.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Haz clic en "Generar Documento"</h5>
+                    <p>
+                      El botón se encuentra en la parte superior de la interfaz.
+                      Al hacer clic, comenzará el proceso de generación.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Espera mientras se procesa</h5>
+                    <p>
+                      El botón mostrará un indicador de carga mientras se
+                      procesa el documento. Este proceso puede tardar unos
+                      segundos dependiendo de la complejidad del documento.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Revisa la vista previa</h5>
+                    <p>
+                      El PDF generado se mostrará automáticamente en el panel de
+                      vista previa, donde podrás revisarlo antes de descargarlo.
+                    </p>
+                  </li>
+
+                  <li class="step-item">
+                    <h5 class="step-title">Guarda el PDF</h5>
+                    <p>
+                      Puedes guardar el PDF generado utilizando las opciones de
+                      tu navegador (generalmente haciendo clic derecho en la
+                      vista previa y seleccionando "Guardar como...").
+                    </p>
+                  </li>
+                </ol>
+
+                <div class="warning-box mt-4">
+                  <h5>
+                    <i class="fas fa-exclamation-triangle me-2"></i> Importante
+                  </h5>
+                  <p>
+                    El generador guarda automáticamente tu código en el
+                    almacenamiento local del navegador, pero es recomendable que
+                    también guardes una copia del código en tu dispositivo para
+                    evitar pérdidas de datos.
+                  </p>
+                </div>
+
+                <h4 class="mt-4 mb-3">Características del PDF generado:</h4>
+
+                <ul>
+                  <li>Formato A4 estándar</li>
+                  <li>Numeración automática de páginas</li>
+                  <li>Índice con referencias a números de página</li>
+                  <li>Tipografía profesional (Times Roman)</li>
+                  <li>Márgenes consistentes en todo el documento</li>
+                  <li>
+                    Estructura jerárquica clara con diferentes niveles de
+                    títulos
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Examples Section -->
+          <section id="examples" class="mt-5">
+            <h2 class="section-title">Ejemplos Prácticos</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  A continuación se presentan algunos ejemplos prácticos para
+                  ayudarte a crear diferentes tipos de documentos con el
+                  generador.
+                </p>
+
+                <div class="accordion accordion-dark bg-dark text-white" id="examplesAccordion">
+                  <div class="accordion-item-dark">
+                    <h2 class="accordion-header" id="headingOne">
+                      <button
+                        class="accordion-button collapsed bg-dark text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne"
+                        aria-expanded="true"
+                        aria-controls="collapseOne"
+                      >
+                        Informe académico completo
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseOne"
+                      class="accordion-collapse collapse show"
+                      aria-labelledby="headingOne"
+                      data-bs-parent="#examplesAccordion"
+                    >
+                      <div class="accordion-body ">
+                        <div class="example-code">
+                          <pre><span class="function-highlight">@Portada@</span>
+<span class="tag-txt">Universidad Nacional Autónoma
+<span class="tag-content">-|</span>
+Análisis del Impacto Ambiental en Ecosistemas Urbanos
+<span class="tag-content">-|</span>
+Autor: Carlos Martínez
+<span class="tag-content">-|</span>
+Materia: Ecología Urbana
+<span class="tag-content">-|</span>
+Profesor: Dra. Luisa Fernández
+<span class="tag-content">-|</span>
+Fecha: Octubre 2025
+<span class="function-highlight">@/Portada@</span>
+
+<span class="function-highlight">@Indice@</span>
+<span class="function-highlight">@/Indice@</span>
+
+<span class="function-highlight">@Introduccion@</span>
+El presente trabajo tiene como objetivo analizar el impacto de la urbanización en los ecosistemas naturales, 
+con especial énfasis en la biodiversidad y los servicios ecosistémicos.<span class="tag-content">-|</span>
+La creciente expansión urbana representa uno de los mayores desafíos ambientales del siglo XXI,
+transformando radicalmente los paisajes naturales y alterando los procesos ecológicos.
+<span class="function-highlight">@/Introduccion@</span>
+
+<span class="tag-highlight">@titulo1@</span>
+Marco Teórico
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="tag-highlight">@titulo2@</span>
+1.1 Conceptos fundamentales de ecología urbana
+<span class="tag-highlight">@/titulo2@</span>
+
+<span class="tag-highlight">@parr@</span>
+La ecología urbana es una disciplina que estudia las interacciones entre los organismos vivos 
+y el entorno construido por el ser humano. Este campo relativamente nuevo integra principios de ecología, 
+geografía, planificación urbana y ciencias sociales.
+<span class="tag-highlight">@/parr@</span>
+
+<span class="tag-highlight">@titulo3@</span>
+1.1.1 Ecosistemas urbanos
+<span class="tag-highlight">@/titulo3@</span>
+
+<span class="tag-highlight">@parr@</span>
+Los ecosistemas urbanos se caracterizan por una alta densidad de infraestructuras humanas, alteración de 
+ciclos biogeoquímicos y modificación de hábitats naturales.
+<span class="tag-highlight">@/parr@</span>
+
+<span class="function-highlight">@pagebreak@</span>
+<span class="function-highlight">@/pagebreak@</span>
+
+<span class="tag-highlight">@titulo1@</span>
+Metodología
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="tag-highlight">@parr@</span>
+Para este estudio se empleó un enfoque mixto que combina análisis cuantitativo de datos ambientales y 
+evaluación cualitativa de servicios ecosistémicos.
+<span class="tag-highlight">@/parr@</span>
+
+<span class="function-highlight">@Conclusion@</span>
+Los resultados obtenidos demuestran que la urbanización tiene efectos profundos y 
+complejos en los ecosistemas naturales. Si bien se observan impactos negativos como la 
+fragmentación de hábitats y la reducción de la biodiversidad, también existen oportunidades
+para desarrollar infraestructuras verdes que mitiguen estos efectos.<span class="tag-content">-|</span>
+Es fundamental implementar políticas de planificación urbana que incorporen criterios
+ecológicos para garantizar ciudades más sostenibles y resilientes frente a los desafíos ambientales actuales.
+</span><span class="function-highlight">@/Conclusion@</span></pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item-dark">
+                    <h2 class="accordion-header" id="headingTwo">
+                      <button
+                        class="accordion-button collapsed bg-dark text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo"
+                        aria-expanded="true"
+                        aria-controls="collapseTwo"
+                      >
+                        Manual técnico simple
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseTwo"
+                      class="accordion-collapse collapse"
+                      aria-labelledby="headingTwo"
+                      data-bs-parent="#examplesAccordion"
+                    >
+                      <div class="accordion-body">
+                        <div class="example-code">
+                          <pre><span class="function-highlight">@Portada@</span>
+<span class="tag-txt">TechSolutions Inc.
+<span class="tag-content">-|</span>
+Manual de Usuario: Sistema de Gestión de Inventario
+<span class="tag-content">-|</span>
+Versión 2.5
+<span class="tag-content">-|</span>
+Departamento Técnico
+<span class="tag-content">-|</span>
+Junio 2025
+<span class="function-highlight">@/Portada@</span>
+
+<span class="function-highlight">@Indice@</span>
+<span class="function-highlight">@/Indice@</span>
+
+<span class="function-highlight">@Introduccion@</span>
+Este manual proporciona instrucciones detalladas para la instalación, configuración y uso del Sistema
+de Gestión de Inventario v2.5. El documento está dirigido a administradores de sistema y usuarios finales.
+<span class="function-highlight">@/Introduccion@</span>
+
+<span class="tag-highlight">@titulo1@</span>
+Requisitos del Sistema
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="tag-highlight">@parr@</span>
+Antes de proceder con la instalación, verifique que su sistema cumple con los siguientes requisitos mínimos:
+<span class="tag-highlight">@/parr@</span>
+
+<span class="tag-highlight">@titulo4@</span>
+Requisitos de hardware
+<span class="tag-highlight">@/titulo4@</span>
+
+<span class="tag-highlight">@parr@</span>
+Procesador: Intel Core i3 o equivalente<span class="tag-content">-|</span>
+Memoria RAM: 4GB mínimo, 8GB recomendado<span class="tag-content">-|</span>
+Espacio en disco: 500MB para la aplicación<span class="tag-content">-|</span>
+<span class="tag-highlight">@/parr@</span>
+
+<span class="tag-highlight">@titulo4@</span>
+Requisitos de software
+<span class="tag-highlight">@/titulo4@</span>
+
+<span class="tag-highlight">@parr@</span>
+Sistema operativo: Windows 10/11, macOS 11+, o Linux<span class="tag-content">-|</span>
+Navegador: Chrome 90+, Firefox 88+, o Edge 90+
+<span class="tag-highlight">@/parr@</span>
+
+<span class="tag-highlight">@titulo1@</span>
+Instalación
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="tag-highlight">@titulo2@</span>
+1.1 Instalación en Windows
+<span class="tag-highlight">@/titulo2@</span>
+
+<span class="tag-highlight">@parr@</span>
+Descargue el instalador desde el portal de descargas corporativo. Ejecute el archivo setup.exe
+y siga las instrucciones en pantalla.
+<span class="tag-highlight">@/parr@</span>
+
+<span class="function-highlight">@Conclusion@</span>
+Este manual ha cubierto los aspectos fundamentales para comenzar a utilizar 
+el Sistema de Gestión de Inventario. Para soporte técnico adicional, contacte al departamento
+de TI a través del portal de ayuda o al correo soporte@techsolutions.com.
+</span><span class="function-highlight">@/Conclusion@</span></pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item-dark">
+                    <h2 class="accordion-header" id="headingThree">
+                      <button
+                        class="accordion-button collapsed bg-dark text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree"
+                        aria-expanded="true"
+                        aria-controls="collapseThree"
+                      >
+                        Propuesta de proyecto
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseThree"
+                      class="accordion-collapse collapse"
+                      aria-labelledby="headingThree"
+                      data-bs-parent="#examplesAccordion"
+                    >
+                      <div class="accordion-body">
+                        <div class="example-code">
+                          <pre><span class="function-highlight">@Portada@</span>
+<span class="tag-txt">Innovación Creativa S.A.
+<span class="tag-content">-|</span>
+Propuesta: Plataforma de Educación Virtual Interactiva
+<span class="tag-content">-|</span>
+Preparado para: Ministerio de Educación
+<span class="tag-content">-|</span>
+Presentado por: Equipo de Desarrollo de Proyectos
+<span class="tag-content">-|</span>
+Fecha: Septiembre 2025
+<span class="function-highlight">@/Portada@</span>
+
+<span class="function-highlight">@Indice@</span>
+<span class="function-highlight">@/Indice@</span>
+
+<span class="function-highlight">@Introduccion@</span>
+Esta propuesta presenta el diseño y desarrollo de una plataforma educativa 
+virtual interactiva destinada a complementar la educación tradicional en escuelas secundarias.<span class="tag-content">-|</span>
+La plataforma utiliza tecnologías emergentes como realidad aumentada e inteligencia 
+artificial para ofrecer experiencias de aprendizaje inmersivas y personalizadas.<span class="tag-content">-|</span>
+Ante los desafíos educativos actuales, esta solución busca aumentar el compromiso de 
+los estudiantes y mejorar los resultados de aprendizaje a través de métodos innovadores de enseñanza.
+<span class="function-highlight">@/Introduccion@</span>
+
+<span class="tag-highlight">@titulo1@</span>
+Resumen Ejecutivo
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="tag-highlight">@parr@</span>
+La plataforma de Educación Virtual Interactiva representa una solución innovadora para 
+modernizar el sistema educativo nacional. Con una inversión inicial estimada de $450,000
+y un cronograma de implementación de 8 meses, este proyecto tiene el potencial de
+transformar significativamente la experiencia educativa de más de 500,000 estudiantes 
+durante el primer año de operación.
+<span class="tag-highlight">@/parr@</span>
+
+<span class="tag-highlight">@titulo1@</span>
+Objetivos del Proyecto
+<span class="tag-highlight">@/titulo1@</span>
+
+<span class="tag-highlight">@parr@</span>
+• Desarrollar una plataforma educativa accesible desde múltiples dispositivos<span class="tag-content">-|</span>
+• Implementar módulos de aprendizaje interactivo para las principales asignaturas<span class="tag-content">-|</span>
+• Integrar herramientas de seguimiento de progreso para estudiantes y docentes<span class="tag-content">-|</span>
+• Facilitar la colaboración entre estudiantes a través de espacios virtuales<span class="tag-content">-|</span>
+<span class="tag-highlight">@/parr@</span>
+
+<span class="function-highlight">@Conclusion@</span>
+La Plataforma de Educación Virtual Interactiva representa una inversión estratégica
+en el futuro de la educación nacional. Al combinar tecnologías innovadoras con 
+principios pedagógicos sólidos, esta solución tiene el potencial de mejorar 
+significativamente los resultados educativos.<span class="tag-content">-|</span>
+Solicitamos respetuosamente la consideración de esta propuesta para su financiamiento
+e implementación. Nuestro equipo está dispuesto a realizar una demostración detallada
+del prototipo y discutir cualquier aspecto adicional del proyecto.
+</span><span class="function-highlight">@/Conclusion@</span></pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Tips and Tricks Section -->
+          <section id="tips" class="mt-5">
+            <h2 class="section-title">Consejos y Trucos</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  Estos consejos te ayudarán a aprovechar al máximo el generador
+                  de documentos y crear PDFs profesionales de manera eficiente.
+                </p>
+
+                <div class="row mt-4">
+                  <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <i class="fas fa-sitemap me-2 text-primary"></i>
+                          Planifica la estructura
+                        </h5>
+                        <p class="card-text">
+                          Antes de comenzar a escribir, esboza la estructura
+                          completa de tu documento. Esto te ayudará a mantener
+                          una organización coherente y facilitará la navegación
+                          para los lectores.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <i class="fas fa-keyboard me-2 text-primary"></i>
+                          Domina los atajos
+                        </h5>
+                        <p class="card-text">
+                          Utiliza el autocompletado con <code>-</code> seguido
+                          de las primeras letras de la etiqueta para agilizar la
+                          escritura. Por ejemplo, <code>-p</code> para párrafos
+                          o <code>-t</code> para títulos.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <i class="fas fa-save me-2 text-primary"></i> Guarda
+                          versiones
+                        </h5>
+                        <p class="card-text">
+                          Aunque el editor guarda automáticamente tu trabajo en
+                          el navegador, es recomendable copiar periódicamente el
+                          código en un archivo de texto como respaldo adicional.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <i class="fas fa-th-list me-2 text-primary"></i> Usa
+                          el separador -|
+                        </h5>
+                        <p class="card-text">
+                          Dentro de una etiqueta, puedes usar
+                          <code>-|</code> para separar párrafos o secciones sin
+                          necesidad de crear nuevas etiquetas, lo que facilita
+                          la organización del contenido.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <i class="fas fa-check-double me-2 text-primary"></i>
+                          Verifica las etiquetas
+                        </h5>
+                        <p class="card-text">
+                          Asegúrate de que cada etiqueta de apertura
+                          <code>@tag@</code> tenga su correspondiente etiqueta
+                          de cierre <code>@/tag@</code> para evitar errores en
+                          la generación del PDF.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <i class="fas fa-indent me-2 text-primary"></i>
+                          Respeta la jerarquía
+                        </h5>
+                        <p class="card-text">
+                          Mantén una estructura jerárquica coherente de títulos
+                          (título1 > título2 > título3) para que el índice se
+                          genere correctamente y el documento sea fácil de
+                          navegar.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tips-box mt-4">
+                  <h5>
+                    <i class="fas fa-lightbulb me-2"></i> Consejo profesional
+                  </h5>
+                  <p>
+                    Para documentos extensos, considera dividirlos en secciones
+                    lógicas utilizando
+                    <code class="code-tag">@pagebreak@</code> para mejorar la
+                    legibilidad. Cada capítulo importante puede comenzar en una
+                    nueva página.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Troubleshooting Section -->
+          <section id="troubleshooting" class="mt-5 mb-5">
+            <h2 class="section-title">Solución de Problemas</h2>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  Si encuentras problemas al utilizar el generador de
+                  documentos, aquí hay algunas soluciones para los
+                  inconvenientes más comunes.
+                </p>
+                <div class="accordion accordion-dark bg-dark text-white" id="troubleshootingAccordion">
+                  <div class="accordion-item-dark">
+                    <h2 class="accordion-header" id="headingProblem1">
+                      <button
+                        class="accordion-button collapsed bg-dark text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseProblem1"
+                        aria-expanded="true"
+                        aria-controls="collapseProblem1"
+                      >
+                        Error al generar el PDF
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseProblem1"
+                      class="accordion-collapse collapse show"
+                      aria-labelledby="headingProblem1"
+                      data-bs-parent="#troubleshootingAccordion"
+                    >
+                      <div class="accordion-body">
+                        <p>
+                          <strong>Síntoma:</strong> Al hacer clic en "Generar
+                          Documento", aparece un mensaje de error o el PDF no se
+                          genera.
+                        </p>
+
+                        <p><strong>Posibles causas y soluciones:</strong></p>
+                        <ul>
+                          <li>
+                            <strong>Etiquetas mal cerradas:</strong> Verifica
+                            que cada etiqueta de apertura tenga su
+                            correspondiente etiqueta de cierre.
+                          </li>
+                          <li>
+                            <strong>Anidación incorrecta:</strong> Asegúrate de
+                            no anidar etiquetas de manera incorrecta (por
+                            ejemplo, no deberías tener una etiqueta
+                            <code class="code-tag">@titulo1@</code> dentro de un
+                            <code class="code-tag">@parr@</code>).
+                          </li>
+                          <li>
+                            <strong>Memoria insuficiente:</strong> Si el
+                            documento es muy extenso, puede que el navegador no
+                            tenga suficiente memoria. Intenta dividir el
+                            documento en partes más pequeñas.
+                          </li>
+                          <li>
+                            <strong>Problemas con el navegador:</strong>
+                            Actualiza tu navegador a la última versión o prueba
+                            con un navegador diferente.
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item-dark">
+                    <h2 class="accordion-header" id="headingProblem2">
+                      <button
+                        class="accordion-button collapsed bg-dark text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseProblem2"
+                        aria-expanded="true"
+                        aria-controls="collapseProblem2"
+                      >
+                        El índice no muestra todas las secciones
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseProblem2"
+                      class="accordion-collapse collapse"
+                      aria-labelledby="headingProblem2"
+                      data-bs-parent="#troubleshootingAccordion"
+                    >
+                      <div class="accordion-body">
+                        <p>
+                          <strong>Síntoma:</strong> El índice generado no
+                          incluye todas las secciones que has creado en el
+                          documento.
+                        </p>
+
+                        <p><strong>Posibles causas y soluciones:</strong></p>
+                        <ul>
+                          <li>
+                            <strong>Etiquetas de título incorrectas:</strong>
+                            Asegúrate de usar las etiquetas de título adecuadas
+                            (<code class="code-tag">@titulo1@</code>,
+                            <code class="code-tag">@titulo2@</code>, etc.) para
+                            las secciones que quieres incluir en el índice.
+                          </li>
+                          <li>
+                            <strong>Posición del índice:</strong> La etiqueta
+                            <code class="code-tag">@Indice@</code> debe
+                            colocarse después de la portada y antes del
+                            contenido principal.
+                          </li>
+                          <li>
+                            <strong>Títulos duplicados:</strong> Si tienes
+                            títulos idénticos, puede haber problemas con la
+                            generación del índice. Intenta hacer cada título
+                            único.
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item-dark">
+                    <h2 class="accordion-header" id="headingProblem3">
+                      <button
+                        class="accordion-button collapsed bg-dark text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseProblem3"
+                        aria-expanded="true"
+                        aria-controls="collapseProblem3"
+                      >
+                        Texto cortado o mal formateado
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseProblem3"
+                      class="accordion-collapse collapse"
+                      aria-labelledby="headingProblem3"
+                      data-bs-parent="#troubleshootingAccordion"
+                    >
+                      <div class="accordion-body">
+                        <p>
+                          <strong>Síntoma:</strong> El texto aparece cortado o
+                          mal formateado en el PDF generado.
+                        </p>
+
+                        <p><strong>Posibles causas y soluciones:</strong></p>
+                        <ul>
+                          <li>
+                            <strong>Caracteres especiales:</strong> Algunos
+                            caracteres especiales pueden causar problemas.
+                            Intenta usar comillas rectas (" ") en lugar de
+                            comillas tipográficas (" ").
+                          </li>
+                          <li>
+                            <strong>Líneas muy largas:</strong> Divide los
+                            párrafos muy largos en líneas más cortas para
+                            mejorar el formato.
+                          </li>
+                          <li>
+                            <strong>Problemas con saltos de línea:</strong> Si
+                            el texto aparece sin espacios entre párrafos, usa la
+                            etiqueta
+                            <code class="code-tag">@linebreak@</code> para
+                            añadir espacio vertical.
+                          </li>
+                          <li>
+                            <strong>Tablas o estructuras complejas:</strong> La
+                            herramienta no está diseñada para manejar tablas
+                            complejas. Simplifica la estructura si es posible.
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item-dark">
+                    <h2 class="accordion-header" id="headingProblem4">
+                      <button
+                        class="accordion-button collapsed bg-dark text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseProblem4"
+                        aria-expanded="true"
+                        aria-controls="collapseProblem4"
+                      >
+                        El autocompletado no funciona
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseProblem4"
+                      class="accordion-collapse collapse"
+                      aria-labelledby="headingProblem4"
+                      data-bs-parent="#troubleshootingAccordion"
+                    >
+                      <div class="accordion-body">
+                        <p>
+                          <strong>Síntoma:</strong> Al escribir "-" seguido de
+                          texto, no aparece el menú de autocompletado.
+                        </p>
+
+                        <p><strong>Posibles causas y soluciones:</strong></p>
+                        <ul>
+                          <li>
+                            <strong>Clic fuera del editor:</strong> Si has hecho
+                            clic fuera del editor, haz clic de nuevo dentro del
+                            editor para activarlo.
+                          </li>
+                          <li>
+                            <strong>Problema con el foco:</strong> Presiona Tab
+                            o haz clic en el editor para asegurarte de que tiene
+                            el foco.
+                          </li>
+                          <li>
+                            <strong>JavaScript desactivado:</strong> Asegúrate
+                            de que JavaScript está habilitado en tu navegador.
+                          </li>
+                          <li>
+                            <strong>Recarga la página:</strong> A veces,
+                            refrescar la página puede resolver problemas
+                            temporales con el autocompletado.
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item-dark">
+                    <h2 class="accordion-header" id="headingProblem5">
+                      <button
+                        class="accordion-button collapsed bg-dark text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseProblem5"
+                        aria-expanded="true"
+                        aria-controls="collapseProblem5"
+                      >
+                        Pérdida de datos
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseProblem5"
+                      class="accordion-collapse collapse"
+                      aria-labelledby="headingProblem5"
+                      data-bs-parent="#troubleshootingAccordion"
+                    >
+                      <div class="accordion-body">
+                        <p>
+                          <strong>Síntoma:</strong> Al regresar al editor, tu
+                          documento ha desaparecido o se ha restaurado a una
+                          versión anterior.
+                        </p>
+
+                        <p><strong>Posibles causas y soluciones:</strong></p>
+                        <ul>
+                          <li>
+                            <strong>Almacenamiento local borrado:</strong> Si
+                            has limpiado los datos de navegación, es posible que
+                            se haya borrado el almacenamiento local. Siempre
+                            guarda copias de seguridad de tu código.
+                          </li>
+                          <li>
+                            <strong>Cambio de navegador:</strong> El
+                            almacenamiento local es específico de cada
+                            navegador. Si cambiaste de navegador, no verás tus
+                            datos guardados.
+                          </li>
+                          <li>
+                            <strong>Modo incógnito:</strong> Si estabas usando
+                            modo incógnito o privado, los datos no se guardan
+                            permanentemente.
+                          </li>
+                          <li>
+                            <strong
+                              >Espacio de almacenamiento insuficiente:</strong
+                            >
+                            Verifica que tu dispositivo tiene suficiente espacio
+                            de almacenamiento.
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tips-box mt-4">
+                  <h5><i class="fas fa-lightbulb me-2"></i> Recomendación</h5>
+                  <p>
+                    Si encuentras un problema que no puedes resolver, intenta
+                    simplificar tu documento para identificar la causa. Comienza
+                    con un documento básico y ve añadiendo secciones
+                    gradualmente hasta identificar qué causa el problema.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h4>Generador de Documentos PDF</h4>
+            <p>
+              Una herramienta profesional para crear documentos estructurados
+              con facilidad.
+            </p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <p>Guía de Usuario v1.0</p>
+            <p>&copy; 2025 - Todos los derechos reservados</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script>
+      // Highlight active section in TOC when scrolling
+      document.addEventListener("DOMContentLoaded", function () {
+        const sections = document.querySelectorAll("section[id]");
+        const navLinks = document.querySelectorAll(".toc-link");
+
+        function highlightNavigation() {
+          let scrollY = window.pageYOffset;
+
+          sections.forEach((current) => {
+            const sectionHeight = current.offsetHeight;
+            const sectionTop = current.offsetTop - 100;
+            const sectionId = current.getAttribute("id");
+
+            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+              navLinks.forEach((link) => {
+                link.classList.remove("active");
+                if (link.getAttribute("href") === "#" + sectionId) {
+                  link.classList.add("active");
+                }
+              });
+            }
+          });
+        }
+
+        window.addEventListener("scroll", highlightNavigation);
+
+        // Smooth scrolling for TOC links
+        navLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute("href");
+            const targetSection = document.querySelector(targetId);
+
+            window.scrollTo({
+              top: targetSection.offsetTop - 80,
+              behavior: "smooth",
+            });
+          });
+        });
+
+        // Initial highlight
+        highlightNavigation();
+      });
+    </script>
+  </body>
 </html>

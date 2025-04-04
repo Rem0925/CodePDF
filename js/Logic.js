@@ -188,58 +188,74 @@ document.addEventListener("click", function () {
 });
 
 function generatePDF() {
-  Save = localStorage.setItem("SAVE", editor.getValue());
-  indexEntries = [];
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const margin = 20;
-  let y = margin;
-  const pageHeight = doc.internal.pageSize.height - (margin + 10);
+  const btn = document.getElementById("generateBtn");
+  btn.classList.add("loading");
+  btn.innerHTML =
+    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando...';
+  setTimeout(() => {
+    try {
+      Save = localStorage.setItem("SAVE", editor.getValue());
+      indexEntries = [];
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const margin = 20;
+      let y = margin;
+      const pageHeight = doc.internal.pageSize.height - (margin + 10);
 
-  const contentLines = ProcessText(doc, margin);
-  console.log(contentLines);
+      const contentLines = ProcessText(doc, margin);
+      console.log(contentLines);
 
-  if (Array.isArray(contentLines)) {
-    let currentPageNumber = 1;
-    contentLines.forEach((Pagina, pageIndex) => {
-      if (pageIndex + 1 !== currentPageNumber) {
+      if (Array.isArray(contentLines)) {
+        let currentPageNumber = 1;
+        contentLines.forEach((Pagina, pageIndex) => {
+          if (pageIndex + 1 !== currentPageNumber) {
+            addPageNumber(currentPageNumber);
+            doc.addPage();
+            y = margin;
+            currentPageNumber = pageIndex + 1;
+          }
+          Pagina.forEach((Linea) => {
+            const { line, Y, tag } = Linea;
+            doc.setFontSize(tag.fontSize || 12);
+            doc.setFont("times", tag.fontStyle || "normal");
+            if (y + 10 > pageHeight) {
+              addPageNumber(currentPageNumber);
+              doc.addPage();
+              currentPageNumber++;
+            }
+            doc.text(
+              tag.margen,
+              Y * 10 + 20,
+              line,
+              tag.margen > 20 ? { align: "center" } : {}
+            );
+          });
+        });
         addPageNumber(currentPageNumber);
-        doc.addPage();
-        y = margin;
-        currentPageNumber = pageIndex + 1;
       }
-      Pagina.forEach((Linea) => {
-        const { line, Y, tag } = Linea;
-        doc.setFontSize(tag.fontSize || 12);
-        doc.setFont("times", tag.fontStyle || "normal");
-        if (y + 10 > pageHeight) {
-          addPageNumber(currentPageNumber);
-          doc.addPage();
-          currentPageNumber++;
-        }
-        doc.text(
-          tag.margen,
-          Y * 10 + 20,
-          line,
-          tag.margen > 20 ? { align: "center" } : {}
-        );
-      });
-    });
-    addPageNumber(currentPageNumber);
-  }
-  addPageNumber(doc.internal.getNumberOfPages());
-  const pdfBlob = doc.output("blob");
-  const pdfUrl = URL.createObjectURL(pdfBlob);
-  const previewFrame = document.getElementById("preview");
-  previewFrame.src = pdfUrl;
+      addPageNumber(doc.internal.getNumberOfPages());
+      const pdfBlob = doc.output("blob");
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.getElementById("preview");
+      previewFrame.src = pdfUrl;
 
-  function addPageNumber(pageNumber) {
-    doc.setFontSize(12);
-    doc.text(`${pageNumber}`, doc.internal.pageSize.width - 15, 10, {
-      align: "right",
-    });
-    return pageNumber;
-  }
+      function addPageNumber(pageNumber) {
+        doc.setFontSize(12);
+        doc.text(`${pageNumber}`, doc.internal.pageSize.width - 15, 10, {
+          align: "right",
+        });
+        return pageNumber;
+      }
+      showAlert("PDF generado con éxito", "success");
+    } catch (error) {
+      console.error(error);
+      showAlert("Error al generar el PDF: " + error.message, "danger");
+    } finally {
+      // Restaurar estado del botón
+      btn.classList.remove("loading");
+      btn.innerHTML = '<i class="fas fa-file-export"></i>Generar Documento';
+    }
+  }, 1000);
 }
 
 function ProcessText(doc, margin) {
@@ -247,6 +263,7 @@ function ProcessText(doc, margin) {
   const lines = editor.getValue().split("\n");
   const pageWidth = doc.internal.pageSize.width;
   const usableWidth = pageWidth + 2 * margin;
+  let CurrentId = 1;
 
   lines.forEach((line, index) => {
     all_Tags.forEach((tag) => {
@@ -275,7 +292,7 @@ function ProcessText(doc, margin) {
             usableWidth
           );
         }
-        Textoo.push({ text: objetoPartes, tag });
+        Textoo.push({ text: objetoPartes, tag, Id: CurrentId++ });
       }
     });
   });
@@ -291,10 +308,11 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
   const pages = [];
   let currentPage = [];
   let currentLineCount = 0;
+  let IdCurrent = 0;
   let Retraso = { Tx: "", Ln: 1, ParResi: "" };
 
   Textoo.forEach((item) => {
-    const { text, tag } = item;
+    const { text, tag, Id } = item;
     let OnePagueEtiq = {
       Intro: false,
       Indi: false,
@@ -377,8 +395,10 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               currentPage = [];
               currentLineCount = 0;
             }
+            IdCurrent = Id;
             break;
           case "Indice":
+            IdCurrent = Id;
             if (currentPage.length > 0) {
               pages.push(currentPage);
             }
@@ -398,15 +418,20 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
             break;
           case "titulo4":
           case "titulo5":
+            const nextItem = Textoo[Textoo.indexOf(item) + 1];
+            const isNextParagraph = nextItem && nextItem.tag.name === "parr";
             line += ".";
             currentPage.push({ line, Y: currentLineCount + 1, tag });
-            indexEntries.push({
-              title: line.slice(0, -1).trim(),
-              page: pages.length + 1,
-              level: 3,
-            });
-            Retraso.Ln = 2;
-            Retraso.Tx = line;
+            currentLineCount++;
+            Retraso.Ln = isNextParagraph ? ((Retraso.Tx = line), 2) : 1;
+            if (IdCurrent != Id) {
+              indexEntries.push({
+                title: line.slice(0, -1).trim(),
+                page: pages.length + 1,
+                level: 3,
+              });
+            }
+            IdCurrent = Id;
             break;
           case "parr":
             //Corregir error de la ultima linea---------------------------------------------------------
@@ -428,6 +453,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               currentLineCount++;
             }
             if (Retraso.Tx) {
+              currentLineCount = currentLineCount - 1;
               const initialIndent = " ".repeat(
                 Math.ceil(
                   (docc.getTextWidth(Retraso.Tx.trim()) * 1.2) /
@@ -447,6 +473,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               currentPage.push({ line, Y: currentLineCount + 1, tag });
               currentLineCount++;
             }
+            IdCurrent = Id;
             break;
           case "Introduccion":
             if (!OnePagueEtiq.Intro) {
@@ -469,7 +496,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               indexEntries.push({
                 title: "Introduccion",
                 page: pages.length + 1,
-                level : 1,
+                level: 1,
               });
             }
             OnePagueEtiq.Intro = true;
@@ -485,6 +512,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               currentPage = [];
               currentLineCount = 0;
             }
+            IdCurrent = Id;
             break;
           case "Conclusion":
             if (!OnePagueEtiq.Conclu) {
@@ -507,7 +535,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               indexEntries.push({
                 title: "Conclusión",
                 page: pages.length + 1,
-                level : 1,
+                level: 1,
               });
             }
             OnePagueEtiq.Conclu = true;
@@ -523,36 +551,48 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               currentPage = [];
               currentLineCount = 0;
             }
+            IdCurrent = Id;
             break;
           case "linebreak":
-            currentLineCount += line ? Number(line) : 1;
+            currentLineCount += line
+              ? Number(line) < 10
+                ? Number(line)
+                : 10
+              : 1;
+            IdCurrent = Id;
             break;
           case "pagebreak":
             pages.push(currentPage);
             currentPage = [];
             currentLineCount = 0;
+            IdCurrent = Id;
             break;
-          case 'titulo2':
-          case 'titulo3':
-            //Arreglar error de que si el titulo es de mas de una linea, se sobre pone 
+          case "titulo2":
+          case "titulo3":
             currentLineCount += Retraso.Ln;
             currentPage.push({ line, Y: currentLineCount, tag });
-            indexEntries.push({
-              title: line.slice(0, -1),
-              page: pages.length + 1,
-              level : 2,
-            });
+            if (IdCurrent != Id) {
+              indexEntries.push({
+                title: line.slice(0, -1),
+                page: pages.length + 1,
+                level: 2,
+              });
+            }
             Retraso.Ln = 1;
+            IdCurrent = Id;
             break;
           default:
             currentLineCount += Retraso.Ln;
             currentPage.push({ line, Y: currentLineCount, tag });
-            indexEntries.push({
-              title: line.slice(0, -1),
-              page: pages.length + 1,
-              level : 1,
-            });
+            if (IdCurrent != Id) {
+              indexEntries.push({
+                title: line.slice(0, -1),
+                page: pages.length + 1,
+                level: 1,
+              });
+            }
             Retraso.Ln = 1;
+            IdCurrent = Id;
             break;
         }
       });
@@ -563,7 +603,8 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
   }
   return AggIndice(pages, docc);
 }
-function AggIndice(pages,doc) {
+// Acomodar para que funcione si el inidice ocupa mas de una pagina-------------------------------------------
+function AggIndice(pages, doc) {
   // Se construye la página de índice usando las entradas acumuladas en indexEntries
   const newIndexPage = [];
   newIndexPage.push({
@@ -574,7 +615,13 @@ function AggIndice(pages,doc) {
   let yCounter = 2;
   indexEntries.forEach((entry) => {
     const dots = doc.splitTextToSize(
-      (entry.level === 1 ? '' : entry.level === 2 ? '           ' : '                      ') + entry.title + "......".repeat(28),
+      (entry.level === 1
+        ? ""
+        : entry.level === 2
+        ? "           "
+        : "                      ") +
+        entry.title +
+        "......".repeat(28),
       doc.internal.pageSize.width + 40
     );
     dots[0] += entry.page;
@@ -593,4 +640,19 @@ function AggIndice(pages,doc) {
     }
   }
   return pages;
+}
+function showAlert(message, type) {
+  const alertDiv = document.createElement("div");
+  alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3`;
+  alertDiv.style.zIndex = "9999";
+  alertDiv.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+  document.body.appendChild(alertDiv);
+
+  // Eliminar alerta después de 5 segundos
+  setTimeout(() => {
+    alertDiv.remove();
+  }, 5000);
 }
