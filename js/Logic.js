@@ -27,12 +27,14 @@ const Text_tags = [
     fontSize: 12,
     fontStyle: "bold",
     margen: 105,
+    align: "center",
   },
   {
     name: "subTitulo",
     fontSize: 12,
     fontStyle: "bolditalic",
     margen: 105,
+    align: "center",
   },
   {
     name: "titulo2",
@@ -223,12 +225,7 @@ function generatePDF() {
               doc.addPage();
               currentPageNumber++;
             }
-            doc.text(
-              tag.margen,
-              Y * 10 + 20,
-              line,
-              tag.margen > 20 ? { align: "center" } : {}
-            );
+            doc.text(tag.margen, Y * 10 + 20, line, tag.align);
           });
         });
         addPageNumber(currentPageNumber);
@@ -351,7 +348,12 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
                 currentPage.push({
                   line: headerLine,
                   Y: currentLineCount + 1,
-                  tag: { fontSize: 12, fontStyle: "normal", margen: 105 },
+                  tag: {
+                    fontSize: 12,
+                    fontStyle: "normal",
+                    margen: 105,
+                    align: "center",
+                  },
                 });
                 currentLineCount++;
               });
@@ -366,7 +368,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
                 currentPage.push({
                   line: titleLine,
                   Y: currentLineCount + 1,
-                  tag: { fontSize: 16, fontStyle: "bold", margen: 105 },
+                  tag: { fontSize: 16, fontStyle: "bold", margen: 105,align: "center" },
                 });
                 currentLineCount++;
               });
@@ -383,7 +385,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
                   tag: {
                     fontSize: 12,
                     fontStyle: "normal",
-                    margen: docc.internal.pageSize.width - 2 * 20,
+                    margen: docc.internal.pageSize.width - 2 * 10,
                     align: "right",
                   },
                 });
@@ -409,7 +411,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               {
                 line: "%%INDEX_PLACEHOLDER%%",
                 Y: 1,
-                tag: { fontSize: 16, fontStyle: "bold", margen: 105 },
+                tag: { fontSize: 16, fontStyle: "bold", margen: 105,align: "center" },
               },
             ];
             pages.push(indexPlaceholder);
@@ -490,6 +492,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
                   fontStyle: "bold",
                   margen: 105,
                   name: "Introduccion",
+                  align: "center",
                 },
               });
               currentLineCount++;
@@ -529,6 +532,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
                   fontStyle: "bold",
                   margen: 105,
                   name: "Conclusion",
+                  align: "center",
                 },
               });
               currentLineCount++;
@@ -610,7 +614,7 @@ function AggIndice(pages, doc) {
   newIndexPage.push({
     line: "Índice",
     Y: 1,
-    tag: { fontSize: 16, fontStyle: "bold", margen: 105 },
+    tag: { fontSize: 12, fontStyle: "bold", margen: 105,align: "center" },
   });
   let yCounter = 2;
   indexEntries.forEach((entry) => {
@@ -628,7 +632,7 @@ function AggIndice(pages, doc) {
     newIndexPage.push({
       line: `${dots[0]}`,
       Y: yCounter,
-      tag: { fontSize: 12, fontStyle: "normal", margen: 20 },
+      tag: { fontSize: 12, fontStyle: "normal", margen: 20,align: "left" },
     });
     yCounter++;
   });
