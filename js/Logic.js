@@ -1,25 +1,14 @@
 const autocompleteContainer = document.getElementById("autocomplete-container");
-
 let Save = localStorage.getItem("SAVE") ?? "";
 
 const Lorem = [
-  `Lorem ipsum dolor sit amet consectetur, adipiscing elit interdum. 
-Viverra dui penatibus lacus odio convallis cum ridiculus habitasse inceptos 
-eleifend mus vehicula, semper felis consequat erat feugiat fusce class congue
-mollis curabitur. Luctus convallis placerat lacus litora non facilisis cubilia
-ante hendrerit imperdiet senectus, id varius primis libero hac dis nec sodales
-vitae sapien.`,
-  `Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex magnam
-cupiditate fugiat vel doloribus sapiente accusantium error dolores,
-tempora distinctio exercitationem, esse sint ipsum placeat harum? A
-perferendis exercitationem ipsa.`,
-  `Lorem ipsum dolor sit amet consectetur adipisicing elit. Est hic facilis
-atque impedit. Porro nihil esse reprehenderit consequuntur fugit expedita
-perspiciatis sint sapiente doloribus. Consequuntur quasi dolorem obcaecati
-eligendi maiores.`,
+  `Lorem ipsum dolor sit amet consectetur, adipiscing elit interdum. Viverra dui penatibus lacus odio convallis cum ridiculus habitasse inceptos eleifend mus vehicula, semper felis consequat erat feugiat fusce class congue mollis curabitur.`,
+  `Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex magnam cupiditate fugiat vel doloribus sapiente accusantium error dolores, tempora distinctio exercitationem, esse sint ipsum placeat harum?`,
+  `Lorem ipsum dolor sit amet consectetur adipisicing elit. Est hic facilis atque impedit. Porro nihil esse reprehenderit consequuntur fugit expedita.`,
 ];
 
 const { jsPDF } = window.jspdf;
+let indexEntries = [];
 
 const Text_tags = [
   {
@@ -36,25 +25,9 @@ const Text_tags = [
     margen: 105,
     align: "center",
   },
-  {
-    name: "titulo2",
-    fontSize: 12,
-    fontStyle: "bold",
-    margen: 20,
-  },
-  {
-    name: "titulo3",
-    fontSize: 12,
-    fontStyle: "bolditalic",
-    margen: 20,
-  },
-  {
-    name: "titulo4",
-    fontSize: 12,
-    fontStyle: "bold",
-    margen: 20,
-    inde: true,
-  },
+  { name: "titulo2", fontSize: 12, fontStyle: "bold", margen: 20 },
+  { name: "titulo3", fontSize: 12, fontStyle: "bolditalic", margen: 20 },
+  { name: "titulo4", fontSize: 12, fontStyle: "bold", margen: 20, inde: true },
   {
     name: "titulo5",
     fontSize: 12,
@@ -64,6 +37,7 @@ const Text_tags = [
   },
   { name: "parr", fontSize: 12, fontStyle: "normal", margen: 20, inde: true },
 ];
+
 const Func_tags = [
   { name: "linebreak" },
   { name: "pagebreak" },
@@ -83,39 +57,22 @@ const Func_tags = [
     fontStyle: "normal",
     inde: true,
   },
-  {
-    name: "Portada",
-    fontStyle: "bold",
-    fontSize: 12,
-    fontStyle: "bold",
-    margen: 105,
-  },
+  { name: "Portada", fontStyle: "bold", fontSize: 12, margen: 105 },
 ];
 
 const all_Tags = Text_tags.concat(Func_tags);
 
-// Definir el modo personalizado
 CodeMirror.defineMode("customTags", function () {
   return {
     token: function (stream) {
-      if (stream.match("-|", true)) {
-        return "tg";
-      }
+      if (stream.match("-|", true)) return "tg";
       for (const tag of Text_tags) {
-        if (stream.match(`@${tag.name}@`, true)) {
-          return "tg";
-        }
-        if (stream.match(`@/${tag.name}@`, true)) {
-          return "tgc";
-        }
+        if (stream.match(`@${tag.name}@`, true)) return "tg";
+        if (stream.match(`@/${tag.name}@`, true)) return "tgc";
       }
       for (const tag of Func_tags) {
-        if (stream.match(`@${tag.name}@`, true)) {
-          return "Ftg";
-        }
-        if (stream.match(`@/${tag.name}@`, true)) {
-          return "Ftgc";
-        }
+        if (stream.match(`@${tag.name}@`, true)) return "Ftg";
+        if (stream.match(`@/${tag.name}@`, true)) return "Ftgc";
       }
       stream.next();
       return null;
@@ -123,33 +80,79 @@ CodeMirror.defineMode("customTags", function () {
   };
 });
 
-// Inicializar CodeMirror con el modo personalizado
 const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
   lineNumbers: true,
   theme: "monokai",
   mode: "customTags",
+  lineWrapping: true,
 });
 
-editor.setValue(Save);
-
-function handleKeyUp(event) {
-  if (event.key === "Enter") {
-    autocompleteContainer.style.display = "none";
-  } else {
-    filterAutocomplete();
-  }
+if (Save) {
+  editor.setValue(Save);
+} else {
+  editor.setValue(
+    `@Portada@\nUNIVERSIDAD DE PRUEBA\n-|\nTÍTULO DEL TRABAJO ACADÉMICO EN FORMATO APA\n-|\nJuan Pérez\nMaría Gómez\nCarlos Ruiz\n-|\nDr. Roberto Jiménez\n-|\nFacultad de Ingeniería\n-|\nCiudad, País\n-|\n2026\n@/Portada@\n\n@Indice@\n@/Indice@\n\n@Introduccion@\nEsta es la introducción del documento. Aquí se presenta el tema central de la investigación de manera detallada siguiendo las normas APA de sangría y estilo.\n@/Introduccion@\n\n@titulo1@\nCapítulo 1: Fundamentos\n@/titulo1@\n\n@parr@\nEste es un párrafo de prueba donde se explica el concepto básico. El sistema justifica el texto y aplica la sangría de primera línea automáticamente según el margen configurado.\n@/parr@\n\n@titulo2@\n1.1 Marco Teórico\n@/titulo2@\n\n@parr@\nAquí se desarrolla la teoría principal del capítulo. Podemos notar cómo los títulos de nivel 2 se alinean a la izquierda en negrita.\n@/parr@\n\n@titulo4@\nTítulo de nivel 4\n@/titulo4@\n\n@parr@\nNótese que los títulos de nivel 4 llevan un punto final y el texto del párrafo siguiente debería comenzar justo después si se usa la lógica de retraso.\n@/parr@\n\n@Conclusion@\nEl generador CodePDF facilita enormemente la creación de documentos estructurados con índice automático.\n@/Conclusion@`,
+  );
 }
+
+// --- CONTADOR DE PALABRAS Y CARACTERES ---
+function updateCounts() {
+  const text = editor.getValue();
+  let printableText = "";
+
+  // Regex corregido: Busca pares de etiquetas @tag@ ... @/tag@
+  // Captura el grupo 2 (el contenido interno)
+  // [\s\S] asegura que capture saltos de línea también
+  const tagRegex = /@(\w+)@([\s\S]*?)@\/\1@/g;
+  let match;
+
+  while ((match = tagRegex.exec(text)) !== null) {
+    let content = match[2];
+
+    // Limpieza adicional: Remover el separador especial -| usado en portadas y otros
+    content = content.replace(/-\|/g, " ");
+
+    // Acumular el contenido limpio
+    printableText += content + " ";
+  }
+
+  // Limpiar espacios múltiples y contar
+  const cleanText = printableText.replace(/\s+/g, " ").trim();
+  const words = cleanText ? cleanText.split(" ").length : 0;
+  const chars = cleanText.length;
+
+  document.getElementById("word-count").textContent = `${words} palabras`;
+  document.getElementById("char-count").textContent = `${chars} caracteres`;
+}
+
+editor.on("change", updateCounts);
+// Inicializar conteo
+updateCounts();
+
+// --- BARRA DE HERRAMIENTAS ---
+function insertTagFromToolbar(tagName) {
+  const cursorPosition = editor.getCursor();
+  const tagData = all_Tags.find((t) => t.name === tagName) || { name: tagName };
+  insertTag(tagData, -1, cursorPosition, true); // true flag para indicar inserción directa
+}
+
+// --- AUTOCOMPLETADO MEJORADO ---
+function handleKeyUp(event) {
+  if (event.key === "Enter") autocompleteContainer.style.display = "none";
+  else filterAutocomplete();
+}
+
 function filterAutocomplete() {
-  const cursorPosition = editor.getCursor(); // Obtener la posición del cursor
-  const line = editor.getLine(cursorPosition.line); // Obtener la línea actual
-  const lastHyphen = line.lastIndexOf("-"); // Buscar el último guion en la línea actual
+  const cursorPosition = editor.getCursor();
+  const line = editor.getLine(cursorPosition.line);
+  const lastHyphen = line.lastIndexOf("-");
   if (lastHyphen === -1) {
-    autocompleteContainer.style.display = "none"; // Si no hay guion, ocultar el autocompletado
+    autocompleteContainer.style.display = "none";
     return;
   }
-  const query = line.slice(lastHyphen + 1).toLowerCase(); // Obtener la consulta
+  const query = line.slice(lastHyphen + 1).toLowerCase();
   const filteredTags = all_Tags.filter((tag) =>
-    tag.name.toLowerCase().includes(query)
+    tag.name.toLowerCase().includes(query),
   );
   autocompleteContainer.innerHTML = "";
   filteredTags.forEach((tag) => {
@@ -159,100 +162,118 @@ function filterAutocomplete() {
     item.onclick = () => insertTag(tag, lastHyphen, cursorPosition);
     autocompleteContainer.appendChild(item);
   });
-  autocompleteContainer.style.display = filteredTags.length ? "block" : "none"; // Mostrar u ocultar según los resultados
+  if (filteredTags.length) {
+    autocompleteContainer.style.display = "flex";
+    const coords = editor.cursorCoords(true, "window");
+    const windowHeight = window.innerHeight;
+    if (windowHeight - coords.bottom < 250) {
+      autocompleteContainer.style.flexDirection = "column-reverse";
+      autocompleteContainer.style.top = "auto";
+      autocompleteContainer.style.bottom = windowHeight - coords.top + 5 + "px";
+    } else {
+      autocompleteContainer.style.flexDirection = "column";
+      autocompleteContainer.style.bottom = "auto";
+      autocompleteContainer.style.top = coords.bottom + 5 + "px";
+    }
+    autocompleteContainer.style.left = coords.left + 5 + "px";
+  } else autocompleteContainer.style.display = "none";
 }
 
-function insertTag(tag, lastHyphen, cursorPosition) {
-  const line = editor.getLine(cursorPosition.line); // Obtener la línea actual
-  const beforeHyphen = line.slice(0, lastHyphen); // Parte antes del guion
-  const afterHyphen = line.slice(lastHyphen + 1 + tag.name.length); // Parte después de la etiqueta
-  // Construir la nueva línea con la etiqueta insertada
-  const newLine =
-    beforeHyphen +
-    (tag.name === "Lorem"
-      ? `${Lorem[Math.floor(Math.random() * 3)]}`
-      : `@${tag.name}@\n@/${tag.name}@`) +
-    afterHyphen;
-  // Reemplazar la línea actual en el editor
-  editor.replaceRange(
-    newLine,
-    { line: cursorPosition.line, ch: 0 },
-    { line: cursorPosition.line, ch: line.length }
-  ); // Posicionar el cursor después de la etiqueta
-  editor.setCursor(cursorPosition.line + 1, 0);
-  autocompleteContainer.style.display = "none"; // Ocultar sugerencias después de insertar
+function insertTag(tag, lastHyphen, cursorPosition, isDirect = false) {
+  let newLine;
+
+  if (isDirect) {
+    // Inserción directa desde toolbar (en la posición actual)
+    const textToInsert =
+      tag.name === "Lorem"
+        ? `${Lorem[Math.floor(Math.random() * Lorem.length)]}`
+        : `@${tag.name}@\n@/${tag.name}@`;
+    editor.replaceRange(textToInsert, cursorPosition);
+
+    // Mover cursor dentro de la etiqueta
+    if (tag.name !== "Lorem") {
+      editor.setCursor(cursorPosition.line + 1, 0);
+    }
+  } else {
+    // Inserción vía autocompletado (reemplazando el guión)
+    const line = editor.getLine(cursorPosition.line);
+    const beforeHyphen = line.slice(0, lastHyphen);
+    const afterHyphen = line.slice(lastHyphen + 1 + tag.name.length);
+    newLine =
+      beforeHyphen +
+      (tag.name === "Lorem"
+        ? `${Lorem[Math.floor(Math.random() * Lorem.length)]}`
+        : `@${tag.name}@\n@/${tag.name}@`) +
+      afterHyphen;
+    editor.replaceRange(
+      newLine,
+      { line: cursorPosition.line, ch: 0 },
+      { line: cursorPosition.line, ch: line.length },
+    );
+    editor.setCursor(cursorPosition.line + 1, 0);
+  }
+
+  editor.focus();
+  autocompleteContainer.style.display = "none";
 }
 
 editor.on("keyup", handleKeyUp);
+editor.on("scroll", () => (autocompleteContainer.style.display = "none"));
 
-document.addEventListener("click", function () {
-  autocompleteContainer.style.display = "none";
-});
-
+// --- PDF GENERATOR ---
 function generatePDF() {
   const btn = document.getElementById("generateBtn");
-  btn.classList.add("loading");
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
   btn.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando...';
+    '<span class="material-symbols-outlined animate-spin mr-2">progress_activity</span> Generando...';
+
   setTimeout(() => {
     try {
-      Save = localStorage.setItem("SAVE", editor.getValue());
+      localStorage.setItem("SAVE", editor.getValue());
       indexEntries = [];
-      const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       const margin = 20;
-      let y = margin;
-      const pageHeight = doc.internal.pageSize.height - (margin + 10);
 
-      const contentLines = ProcessText(doc, margin);
-      console.log(contentLines);
+      const contentPages = ProcessText(doc, margin);
 
-      if (Array.isArray(contentLines)) {
-        let currentPageNumber = 1;
-        contentLines.forEach((Pagina, pageIndex) => {
-          if (pageIndex + 1 !== currentPageNumber) {
-            addPageNumber(currentPageNumber);
-            doc.addPage();
-            y = margin;
-            currentPageNumber = pageIndex + 1;
-          }
+      if (Array.isArray(contentPages)) {
+        contentPages.forEach((Pagina, pageIndex) => {
+          if (pageIndex > 0) doc.addPage();
+
           Pagina.forEach((Linea) => {
             const { line, Y, tag } = Linea;
+            if (!line) return;
             doc.setFontSize(tag.fontSize || 12);
             doc.setFont("times", tag.fontStyle || "normal");
-            if (y + 10 > pageHeight) {
-              addPageNumber(currentPageNumber);
-              doc.addPage();
-              currentPageNumber++;
-            }
-            doc.text(tag.margen, Y * 10 + 20, line, tag.align);
+            doc.text(line, tag.margen, Y * 10 + 20, {
+              align: tag.align || "left",
+            });
           });
+          addPageNumber(doc, pageIndex + 1);
         });
-        addPageNumber(currentPageNumber);
       }
-      addPageNumber(doc.internal.getNumberOfPages());
-      const pdfBlob = doc.output("blob");
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      const previewFrame = document.getElementById("preview");
-      previewFrame.src = pdfUrl;
 
-      function addPageNumber(pageNumber) {
-        doc.setFontSize(12);
-        doc.text(`${pageNumber}`, doc.internal.pageSize.width - 15, 10, {
-          align: "right",
-        });
-        return pageNumber;
-      }
-      showAlert("PDF generado con éxito", "success");
+      const pdfBlob = doc.output("blob");
+      document.getElementById("preview").src = URL.createObjectURL(pdfBlob);
+      document.getElementById("empty-state").style.display = "none";
+      showToast("PDF Generado con éxito", "success");
     } catch (error) {
       console.error(error);
-      showAlert("Error al generar el PDF: " + error.message, "danger");
+      showToast("Error: " + error.message, "error");
     } finally {
-      // Restaurar estado del botón
-      btn.classList.remove("loading");
-      btn.innerHTML = '<i class="fas fa-file-export"></i>Generar Documento';
+      btn.disabled = false;
+      btn.innerHTML = originalText;
     }
-  }, 1000);
+  }, 500);
+}
+
+function addPageNumber(doc, pageNumber) {
+  doc.setFontSize(10);
+  doc.setFont("times", "normal");
+  doc.text(`${pageNumber}`, doc.internal.pageSize.width - 15, 10, {
+    align: "right",
+  });
 }
 
 function ProcessText(doc, margin) {
@@ -268,16 +289,14 @@ function ProcessText(doc, margin) {
         let j = 1;
         let tagContent = "";
         while (
-          lines[index + j] &&
+          lines[index + j] !== undefined &&
           !lines[index + j].includes(`@/${tag.name}@`)
         ) {
           tagContent += lines[index + j] + " ";
           j++;
         }
         const indent = tag.inde ? "           " : "";
-
         const partes = tagContent.trim().split("-|");
-
         const objetoPartes = partes.reduce((acc, parte, i) => {
           acc[`parte${i + 1}`] = indent + parte.trim();
           return acc;
@@ -286,27 +305,23 @@ function ProcessText(doc, margin) {
         for (let key in objetoPartes) {
           objetoPartes[key] = doc.splitTextToSize(
             objetoPartes[key],
-            usableWidth
+            usableWidth,
           );
         }
         Textoo.push({ text: objetoPartes, tag, Id: CurrentId++ });
       }
     });
   });
-  const organizedPages = organizeTextByPages(
-    Textoo,
-    /*Cantidad de Lineas por Pagina*/ 25,
-    doc
-  );
-
-  return organizedPages;
+  return organizeTextByPages(Textoo, 25, doc);
 }
+
 function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
-  const pages = [];
+  let pages = [];
   let currentPage = [];
   let currentLineCount = 0;
   let IdCurrent = 0;
   let Retraso = { Tx: "", Ln: 1, ParResi: "" };
+  let indexStartPageIndex = -1;
 
   Textoo.forEach((item) => {
     const { text, tag, Id } = item;
@@ -316,127 +331,97 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
       Conclu: false,
       Port: false,
     };
+
     Object.values(text).forEach((lines) => {
       lines.forEach((line) => {
-        if (currentLineCount + 1 > maxLinesPerPage) {
+        if (currentLineCount >= maxLinesPerPage) {
           pages.push(currentPage);
           currentPage = [];
           currentLineCount = 0;
         }
+
         switch (tag.name) {
           case "Portada":
             if (!OnePagueEtiq.Port) {
-              if (currentPage.length > 0) {
-                pages.push(currentPage);
-              }
+              if (currentPage.length > 0) pages.push(currentPage);
               currentPage = [];
-              currentLineCount = 0;
 
-              const header = text.parte1.toString().split(`.`);
-              const title = text.parte2;
-              const footer = Object.values(text)
-                .slice(2, 9) // Limitar a 7 elementos
-                .map((item) => `${item}`)
-                .join("\n");
-
-              // Add header
-              const headerLines = docc.splitTextToSize(
-                header,
-                docc.internal.pageSize.width - 20
+              const headerText = text.parte1 ? text.parte1.toString() : "";
+              const hLines = docc.splitTextToSize(
+                headerText,
+                docc.internal.pageSize.width - 20,
               );
-              headerLines.forEach((headerLine) => {
+              hLines.forEach((l) => {
                 currentPage.push({
-                  line: headerLine,
-                  Y: currentLineCount + 1,
+                  line: l,
+                  Y: currentPage.length + 1,
+                  tag: { margen: 105, align: "center", fontSize: 12 },
+                });
+              });
+
+              const titleText = text.parte2 ? text.parte2.toString() : "";
+              const tLines = docc.splitTextToSize(
+                titleText,
+                docc.internal.pageSize.width - 40,
+              );
+              let tY = 10;
+              tLines.forEach((l) => {
+                currentPage.push({
+                  line: l,
+                  Y: tY++,
                   tag: {
-                    fontSize: 12,
-                    fontStyle: "normal",
+                    fontSize: 16,
+                    fontStyle: "bold",
                     margen: 105,
                     align: "center",
                   },
                 });
-                currentLineCount++;
               });
 
-              // Add title
-              const titleLines = docc.splitTextToSize(
-                title,
-                docc.internal.pageSize.width - 2 * 20
-              );
-              currentLineCount = 12 - titleLines.length / 2;
-              titleLines.forEach((titleLine) => {
+              const footerParts = Object.keys(text)
+                .slice(2)
+                .map((key) => text[key])
+                .join("\n");
+              const footerLines = docc.splitTextToSize(footerParts, 60);
+              let startY = Math.max(tY + 2, 26 - footerLines.length);
+              footerLines.forEach((line, index) => {
                 currentPage.push({
-                  line: titleLine,
-                  Y: currentLineCount + 1,
-                  tag: { fontSize: 16, fontStyle: "bold", margen: 105,align: "center" },
-                });
-                currentLineCount++;
-              });
-              // Add footer
-              const footerLines = docc.splitTextToSize(footer, 60);
-              let footerY =
-                docc.internal.pageSize.height -
-                2 * 20 -
-                footerLines.length * 10;
-              footerLines.forEach((footerLine) => {
-                currentPage.push({
-                  line: footerLine,
-                  Y: footerY / 10,
+                  line: line,
+                  Y: startY + index,
                   tag: {
                     fontSize: 12,
-                    fontStyle: "normal",
-                    margen: docc.internal.pageSize.width - 2 * 10,
+                    margen: docc.internal.pageSize.width - 20,
                     align: "right",
                   },
                 });
-                footerY += 10;
               });
 
               OnePagueEtiq.Port = true;
               pages.push(currentPage);
               currentPage = [];
-              currentLineCount = 0;
             }
-            IdCurrent = Id;
             break;
+
           case "Indice":
-            IdCurrent = Id;
-            if (currentPage.length > 0) {
-              pages.push(currentPage);
-            }
-            currentPage = [];
-            currentLineCount = 0;
-            // Reservamos una página placeholder para el índice
-            const indexPlaceholder = [
+            if (currentPage.length > 0) pages.push(currentPage);
+            indexStartPageIndex = pages.length;
+            pages.push([
               {
                 line: "%%INDEX_PLACEHOLDER%%",
                 Y: 1,
-                tag: { fontSize: 16, fontStyle: "bold", margen: 105,align: "center" },
+                tag: {
+                  fontSize: 16,
+                  fontStyle: "bold",
+                  margen: 105,
+                  align: "center",
+                },
               },
-            ];
-            pages.push(indexPlaceholder);
+            ]);
             currentPage = [];
             currentLineCount = 0;
             break;
-          case "titulo4":
-          case "titulo5":
-            const nextItem = Textoo[Textoo.indexOf(item) + 1];
-            const isNextParagraph = nextItem && nextItem.tag.name === "parr";
-            line += ".";
-            currentPage.push({ line, Y: currentLineCount + 1, tag });
-            currentLineCount++;
-            Retraso.Ln = isNextParagraph ? ((Retraso.Tx = line), 2) : 1;
-            if (IdCurrent != Id) {
-              indexEntries.push({
-                title: line.slice(0, -1).trim(),
-                page: pages.length + 1,
-                level: 3,
-              });
-            }
-            IdCurrent = Id;
-            break;
+
           case "parr":
-            //Corregir error de la ultima linea---------------------------------------------------------
             if (Retraso.ParResi) {
               let Split = Retraso.ParResi.toString() + " " + line;
               if (
@@ -445,7 +430,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               ) {
                 let splitText = docc.splitTextToSize(
                   Split,
-                  docc.internal.pageSize.width + 40
+                  docc.internal.pageSize.width + 40,
                 );
                 Split = splitText[0];
                 Retraso.ParResi = splitText.slice(1).join(" ");
@@ -455,17 +440,17 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               currentLineCount++;
             }
             if (Retraso.Tx) {
-              currentLineCount = currentLineCount - 1;
+              currentLineCount--;
               const initialIndent = " ".repeat(
                 Math.ceil(
                   (docc.getTextWidth(Retraso.Tx.trim()) * 1.2) /
-                    docc.getTextWidth(" ")
-                )
+                    docc.getTextWidth(" "),
+                ),
               );
               line = initialIndent + line;
               let splitText = docc.splitTextToSize(
                 line,
-                docc.internal.pageSize.width + 40
+                docc.internal.pageSize.width + 40,
               );
               Retraso.Tx = "";
               Retraso.ParResi = splitText.slice(1).join(" ");
@@ -475,188 +460,178 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               currentPage.push({ line, Y: currentLineCount + 1, tag });
               currentLineCount++;
             }
-            IdCurrent = Id;
             break;
+
           case "Introduccion":
-            if (!OnePagueEtiq.Intro) {
-              if (currentPage.length > 0) {
-                pages.push(currentPage);
-              }
-              currentPage = [];
-              currentLineCount = 0;
-              currentPage.push({
-                line: "Introduccion",
-                Y: currentLineCount + 1,
-                tag: {
-                  fontSize: 12,
-                  fontStyle: "bold",
-                  margen: 105,
-                  name: "Introduccion",
-                  align: "center",
-                },
-              });
-              currentLineCount++;
-              indexEntries.push({
-                title: "Introduccion",
-                page: pages.length + 1,
-                level: 1,
-              });
-            }
-            OnePagueEtiq.Intro = true;
-            currentPage.push({ line, Y: currentLineCount + 1, tag });
-            currentLineCount++;
-            let $item2 = Textoo[Textoo.indexOf(item)];
-            let Ultimo2 =
-              $item2.text[
-                Object.keys($item2.text)[Object.keys($item2.text).length - 1]
-              ];
-            if (Ultimo2[Ultimo2.length - 1] == line) {
-              pages.push(currentPage);
-              currentPage = [];
-              currentLineCount = 0;
-            }
-            IdCurrent = Id;
-            break;
           case "Conclusion":
-            if (!OnePagueEtiq.Conclu) {
-              if (currentPage.length > 0) {
-                pages.push(currentPage);
-              }
+            if (
+              (tag.name === "Introduccion" && !OnePagueEtiq.Intro) ||
+              (tag.name === "Conclusion" && !OnePagueEtiq.Conclu)
+            ) {
+              if (currentPage.length > 0) pages.push(currentPage);
               currentPage = [];
               currentLineCount = 0;
+              let title =
+                tag.name === "Introduccion" ? "Introducción" : "Conclusión";
               currentPage.push({
-                line: "Conclusión",
-                Y: currentLineCount + 1,
+                line: title,
+                Y: 1,
                 tag: {
                   fontSize: 12,
                   fontStyle: "bold",
                   margen: 105,
-                  name: "Conclusion",
                   align: "center",
                 },
               });
-              currentLineCount++;
-              indexEntries.push({
-                title: "Conclusión",
-                page: pages.length + 1,
-                level: 1,
-              });
+              currentLineCount = 2;
+              indexEntries.push({ title, page: pages.length + 1, level: 1 });
+              if (tag.name === "Introduccion") OnePagueEtiq.Intro = true;
+              else OnePagueEtiq.Conclu = true;
             }
-            OnePagueEtiq.Conclu = true;
             currentPage.push({ line, Y: currentLineCount + 1, tag });
             currentLineCount++;
-            let $item = Textoo[Textoo.indexOf(item)];
-            let Ultimo =
-              $item.text[
-                Object.keys($item.text)[Object.keys($item.text).length - 1]
-              ];
-            if (Ultimo[Ultimo.length - 1] == line) {
-              pages.push(currentPage);
-              currentPage = [];
-              currentLineCount = 0;
-            }
-            IdCurrent = Id;
             break;
-          case "linebreak":
-            currentLineCount += line
-              ? Number(line) < 10
-                ? Number(line)
-                : 10
-              : 1;
-            IdCurrent = Id;
-            break;
-          case "pagebreak":
-            pages.push(currentPage);
-            currentPage = [];
-            currentLineCount = 0;
-            IdCurrent = Id;
-            break;
-          case "titulo2":
-          case "titulo3":
-            currentLineCount += Retraso.Ln;
-            currentPage.push({ line, Y: currentLineCount, tag });
+
+          case "titulo4":
+          case "titulo5":
+            line += ". ";
+            currentPage.push({ line, Y: currentLineCount + 1, tag });
+            currentLineCount++;
+            Retraso.Tx = line;
             if (IdCurrent != Id) {
               indexEntries.push({
-                title: line.slice(0, -1),
+                title: line.trim(),
                 page: pages.length + 1,
-                level: 2,
+                level: 3,
               });
             }
-            Retraso.Ln = 1;
-            IdCurrent = Id;
             break;
+
           default:
-            currentLineCount += Retraso.Ln;
-            currentPage.push({ line, Y: currentLineCount, tag });
-            if (IdCurrent != Id) {
+            currentPage.push({ line, Y: currentLineCount + 1, tag });
+            currentLineCount++;
+            if (IdCurrent != Id && tag.name.includes("titulo")) {
+              let lvl =
+                tag.name.includes("2") || tag.name.includes("3") ? 2 : 1;
               indexEntries.push({
-                title: line.slice(0, -1),
+                title: line.trim(),
                 page: pages.length + 1,
-                level: 1,
+                level: lvl,
               });
             }
-            Retraso.Ln = 1;
-            IdCurrent = Id;
             break;
         }
+        IdCurrent = Id;
       });
     });
-  });
-  if (currentPage.length > 0) {
-    pages.push(currentPage);
-  }
-  return AggIndice(pages, docc);
-}
-// Acomodar para que funcione si el inidice ocupa mas de una pagina-------------------------------------------
-function AggIndice(pages, doc) {
-  // Se construye la página de índice usando las entradas acumuladas en indexEntries
-  const newIndexPage = [];
-  newIndexPage.push({
-    line: "Índice",
-    Y: 1,
-    tag: { fontSize: 12, fontStyle: "bold", margen: 105,align: "center" },
-  });
-  let yCounter = 2;
-  indexEntries.forEach((entry) => {
-    const dots = doc.splitTextToSize(
-      (entry.level === 1
-        ? ""
-        : entry.level === 2
-        ? "           "
-        : "                      ") +
-        entry.title +
-        "......".repeat(28),
-      doc.internal.pageSize.width + 40
-    );
-    dots[0] += entry.page;
-    newIndexPage.push({
-      line: `${dots[0]}`,
-      Y: yCounter,
-      tag: { fontSize: 12, fontStyle: "normal", margen: 20,align: "left" },
-    });
-    yCounter++;
-  });
-  // Buscamos el placeholder y lo reemplazamos por el contenido del índice
-  for (let i = 0; i < pages.length; i++) {
-    if (pages[i].length > 0 && pages[i][0].line === "%%INDEX_PLACEHOLDER%%") {
-      pages[i] = newIndexPage;
-      break;
+
+    if (
+      ["Portada", "Indice", "Introduccion", "Conclusion"].includes(tag.name)
+    ) {
+      if (currentPage.length > 0) {
+        pages.push(currentPage);
+        currentPage = [];
+        currentLineCount = 0;
+      }
     }
+  });
+  if (currentPage.length > 0) pages.push(currentPage);
+  return AggIndice(pages, docc, indexStartPageIndex);
+}
+
+function AggIndice(pages, doc, placeholderIndex) {
+  if (placeholderIndex === -1) return pages;
+
+  let indexPages = [];
+  let currentIdxPage = [
+    {
+      line: "Índice",
+      Y: 1,
+      tag: { fontSize: 14, fontStyle: "bold", margen: 105, align: "center" },
+    },
+  ];
+  let yCounter = 3;
+
+  indexEntries.forEach((entry) => {
+    if (yCounter > 25) {
+      indexPages.push(currentIdxPage);
+      currentIdxPage = [];
+      yCounter = 2;
+    }
+    const indent =
+      entry.level === 2 ? "    " : entry.level === 3 ? "        " : "";
+    const cleanTitle =
+      entry.title.length > 40
+        ? entry.title.substring(0, 37) + "..."
+        : entry.title;
+
+    let dots = doc.splitTextToSize(
+      indent + cleanTitle + "......".repeat(28),
+      doc.internal.pageSize.width + 40,
+    );
+    let textLine = dots[0] + " " + entry.page;
+
+    currentIdxPage.push({
+      line: textLine,
+      Y: yCounter++,
+      tag: { fontSize: 11, fontStyle: "normal", margen: 20, align: "left" },
+    });
+  });
+  indexPages.push(currentIdxPage);
+
+  const extraPages = indexPages.length - 1;
+  if (extraPages > 0) {
+    indexEntries.forEach((e) => {
+      if (e.page > placeholderIndex + 1) e.page += extraPages;
+    });
+    return AggIndice(pages, doc, placeholderIndex);
   }
+
+  pages.splice(placeholderIndex, 1, ...indexPages);
   return pages;
 }
-function showAlert(message, type) {
-  const alertDiv = document.createElement("div");
-  alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3`;
-  alertDiv.style.zIndex = "9999";
-  alertDiv.innerHTML = `
-    ${message}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  `;
-  document.body.appendChild(alertDiv);
 
-  // Eliminar alerta después de 5 segundos
+function showToast(message, type) {
+  const container = document.getElementById("toast-container");
+  const toast = document.createElement("div");
+  toast.className = `${type === "success" ? "bg-indigo-600" : "bg-red-600"} text-white px-6 py-3 rounded-lg shadow-xl mb-3 transition-all duration-300`;
+  toast.innerHTML = message;
+  container.appendChild(toast);
   setTimeout(() => {
-    alertDiv.remove();
-  }, 5000);
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 500);
+  }, 3000);
+}
+
+// --- FUNCIÓN TOGGLE THEME ---
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+
+  // Cambiar tema de CodeMirror
+  if (isDark) {
+    editor.setOption("theme", "monokai");
+  } else {
+    editor.setOption("theme", "default");
+  }
+}
+
+function saveToLocal() {
+  localStorage.setItem("SAVE", editor.getValue());
+  showToast("Progreso guardado localmente", "success");
+}
+
+// --- DESCARGAR CÓDIGO FUENTE ---
+function downloadSource() {
+  const text = editor.getValue();
+  const blob = new Blob([text], { type: "text/plain" });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "mi_documento_apa.txt";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+  showToast("Descarga iniciada", "success");
 }
