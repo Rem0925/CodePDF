@@ -222,6 +222,11 @@ Autor: Estudiante</span>
                         </thead>
                         <tbody class="divide-y divide-border-light dark:divide-border-dark">
                             <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">@Resumen@</code></td>
+                                <td class="p-4">Al igual que Introducción y Conclusión, aparta una hoja para situar el resumen (Abstract) de tu trabajo. A diferencia de las demás, este carece totalmente de sangrías.</td>
+                                <td class="p-4 text-slate-400">@Resumen@</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
                                 <td class="p-4"><code class="text-pink-500 font-mono">@titulo1@</code></td>
                                 <td class="p-4">Centrado, Negrita.</td>
                                 <td class="p-4">Nivel 1 (Principal)</td>
@@ -245,6 +250,56 @@ Autor: Estudiante</span>
                                 <td class="p-4"><code class="text-pink-500 font-mono">@parr@</code></td>
                                 <td class="p-4">Fuente normal, alineación izquierda con sangría en la primera línea.</td>
                                 <td class="p-4 text-slate-400">No se incluye</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">@citaLarga@</code></td>
+                                <td class="p-4">Sangría de bloque (Hacia la derecha) de 1.27 cm (0.5 in) en <strong>todas</strong> las líneas. Para citas de +40 palabras según formato APA.</td>
+                                <td class="p-4 text-slate-400">No se incluye</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">@referencias@</code></td>
+                                <td class="p-4">Genera <strong>Sangría Francesa</strong> obligatoria para bibliografía. Cada cita dentro de esta etiqueta sangrará sus siguientes líneas automáticamente.</td>
+                                <td class="p-4 text-slate-400">Usar al final del documento</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">@lista@</code></td>
+                                <td class="p-4">Crea una lista de viñetas. Para separar cada elemento de otra viñeta utilza el separador <code>-|</code>.</td>
+                                <td class="p-4 text-slate-400">No se incluye</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">@notaPie@</code></td>
+                                <td class="p-4">Genera una línea divisoria y un número de referencia (¹) en un tamaño de letra reducido para anotaciones breves.</td>
+                                <td class="p-4 text-slate-400">No se incluye</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="format-tags" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
+                    <span class="material-symbols-outlined mr-2 text-indigo-500">text_format</span>
+                    Etiquetas Internas (Sub-Formatos)
+                </h2>
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden transition-colors">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 text-sm">
+                                <th class="p-4 font-semibold border-b border-border-light dark:border-border-dark">Sintaxis</th>
+                                <th class="p-4 font-semibold border-b border-border-light dark:border-border-dark">Descripción</th>
+                                <th class="p-4 font-semibold border-b border-border-light dark:border-border-dark">Ejemplo de Uso</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-700 dark:text-slate-300 text-sm divide-y divide-border-light dark:divide-border-dark">
+                            <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">**texto**</code></td>
+                                <td class="p-4">Convierte cualquier bloque de palabras dentro de un párrafo en letra <strong>Negrita</strong> (Bold) estructural.</td>
+                                <td class="p-4 text-slate-400">El **texto** libre</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">*texto*</code></td>
+                                <td class="p-4">Convierte la oración adjunta en <em>Cursiva</em> (Italic) directamente. Compatible con alineaciones.</td>
+                                <td class="p-4 text-slate-400">El *texto* libre</td>
                             </tr>
                         </tbody>
                     </table>
@@ -390,6 +445,98 @@ Junio 2026</span>
 <span class="tg-pink">@parr@</span>
 <span class="tg-text">El principal cuello de botella fue la logística de envíos hacia nuevas regiones del país...</span>
 <span class="tg-pink">@/parr@</span></pre>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="group bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-5 font-semibold cursor-pointer text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            Ejemplo Final de Comprobación y Testing (Prueba Múltiple)
+                            <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                        </summary>
+                        <div class="p-5 border-t border-border-light dark:border-border-dark">
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Copia el siguiente texto íntegro en tu editor, es un código diseñado para probar absolutamente todas las etiquetas, incluyendo listas, citas y sangrías francesas, para que visualices cómo actúan.</p>
+                            <div class="relative group">
+                                <button onclick="copyCode(this)" class="absolute top-3 right-3 p-1.5 bg-slate-700/50 hover:bg-slate-600 text-slate-300 rounded opacity-0 group-hover:opacity-100 transition-opacity" title="Copiar código">
+                                    <span class="material-symbols-outlined text-sm">content_copy</span>
+                                </button>
+<pre class="doc-code text-sm"><span class="tg-orange">@Portada@</span><span class="tg-text">
+UNIVERSIDAD REGIONAL
+-|
+Evaluación de Componentes Textuales
+-|
+Catedrático: Prof. Pérez
+Alumno: John Doe
+-|
+Marzo, 2026</span>
+<span class="tg-orange">@/Portada@</span>
+
+<span class="tg-orange">@Indice@</span>
+<span class="tg-orange">@/Indice@</span>
+
+<span class="tg-pink">@Resumen@</span><span class="tg-text">
+Este es el resumen oficial del documento (Abstract). Observarás que, al contrario del resto de mis elementos, yo no porto ninguna sangría en mi primera línea, obedeciendo a la estricta Norma APA. Si escribes libremente, mantendré una alineación de bloque perfecta.</span>
+<span class="tg-pink">@/Resumen@</span>
+
+<span class="tg-pink">@Introduccion@</span><span class="tg-text">
+En el siguiente escrito pondremos a prueba el compilador de etiquetas de la aplicación web, garantizando que el PDF renderice todos los caracteres solicitados.</span>
+<span class="tg-orange">@/Introduccion@</span>
+
+<span class="tg-pink">@titulo1@</span><span class="tg-text">
+Componentes Principales</span>
+<span class="tg-pink">@/titulo1@</span>
+
+<span class="tg-pink">@titulo2@</span><span class="tg-text">
+1. Párrafos y Citas Largas</span>
+<span class="tg-pink">@/titulo2@</span>
+
+<span class="tg-pink">@titulo3@</span><span class="tg-text">
+1.1.1 Título de tercer nivel en cursiva negra</span>
+<span class="tg-pink">@/titulo3@</span>
+
+<span class="tg-pink">@titulo4@</span><span class="tg-text">
+Título de nivel 4 indentado y con punto final.</span>
+<span class="tg-pink">@/titulo4@</span>
+
+<span class="tg-pink">@titulo5@</span><span class="tg-text">
+Título de nivel 5 indentado en cursiva negra.</span>
+<span class="tg-pink">@/titulo5@</span>
+
+<span class="tg-orange">@linebreak@</span>
+
+<span class="tg-pink">@parr@</span><span class="tg-text">
+El procesador estándar añade una sangría sutil en la primera línea para cumplir los estándares de legibilidad. Sin embargo, cuando se requieren **citas muy largas** que superen las *cuarenta palabras*, se utilizará una etiqueta especial como la que sigue:</span>
+<span class="tg-pink">@/parr@</span>
+
+<span class="tg-pink">@citaLarga@</span><span class="tg-text">
+Esta es una cita en bloque según APA. Como notarás al renderizarlo, toda la escritura sufre una sangría general desde su margen inicial empujándose hacia la derecha. De esta forma, respeta rigurosamente las normas sin necesidad de utilizar las comillas dobles ordinarias.</span>
+<span class="tg-pink">@/citaLarga@</span>
+
+<span class="tg-pink">@notaPie@</span><span class="tg-text">
+Aquí vemos cómo se imprime una nota aclaratoria y reduce visualmente todo.</span>
+<span class="tg-pink">@/notaPie@</span>
+
+<span class="tg-orange">@pagebreak@</span>
+
+<span class="tg-pink">@titulo2@</span><span class="tg-text">
+2. Viñetas y Referencias</span>
+<span class="tg-pink">@/titulo2@</span>
+
+<span class="tg-pink">@lista@</span><span class="tg-text">
+Elemento de prueba 1. Se dibuja una viñeta automática a un costado de este bloque tabulando sus líneas subsecuentes, logrando estructura limpia.
+-|
+Elemento de prueba 2 agregado gracias al separador de guión que corta el bloque para generar un nuevo recuadro.</span>
+<span class="tg-pink">@/lista@</span>
+
+<span class="tg-pink">@referencias@</span><span class="tg-text">
+Ministerio de Tecnología. (2025). Manual estricto de publicación en normativas de citas bibliográficas de séptima versión utilizando herramientas web. Recuperado de una URL sumamente larga que abarcará sin duda más de dos líneas en la página para que la sangría de estilo francesa surta efecto sin cruzar los márgenes.
+-|
+Borges, J. L. (1944). Ficciones. Editorial Sur. La demostración secundaria asegura que el objeto parte reinicia el indentado para una nueva línea.</span>
+<span class="tg-pink">@/referencias@</span>
+
+<span class="tg-orange">@Conclusion@</span><span class="tg-text">
+El compilador ha rendido excelentemente con todos los bloques disponibles.</span>
+<span class="tg-orange">@/Conclusion@</span></pre>
                             </div>
                         </div>
                     </details>

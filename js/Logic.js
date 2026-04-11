@@ -10,32 +10,22 @@ const Lorem = [
 const { jsPDF } = window.jspdf;
 let indexEntries = [];
 
+// Normas APA 7ma Edición
+const APA_MARGIN = 25.4;
+const APA_INDENT = 12.7;
+
 const Text_tags = [
-  {
-    name: "titulo1",
-    fontSize: 12,
-    fontStyle: "bold",
-    margen: 105,
-    align: "center",
-  },
-  {
-    name: "subTitulo",
-    fontSize: 12,
-    fontStyle: "bolditalic",
-    margen: 105,
-    align: "center",
-  },
-  { name: "titulo2", fontSize: 12, fontStyle: "bold", margen: 20 },
-  { name: "titulo3", fontSize: 12, fontStyle: "bolditalic", margen: 20 },
-  { name: "titulo4", fontSize: 12, fontStyle: "bold", margen: 20, inde: true },
-  {
-    name: "titulo5",
-    fontSize: 12,
-    fontStyle: "bolditalic",
-    margen: 20,
-    inde: true,
-  },
-  { name: "parr", fontSize: 12, fontStyle: "normal", margen: 20, inde: true },
+  { name: "titulo1", fontSize: 12, fontStyle: "bold", margen: 105, align: "center", inde: false },
+  { name: "subTitulo", fontSize: 12, fontStyle: "bolditalic", margen: 105, align: "center", inde: false },
+  { name: "titulo2", fontSize: 12, fontStyle: "bold", margen: APA_MARGIN, inde: false },
+  { name: "titulo3", fontSize: 12, fontStyle: "bolditalic", margen: APA_MARGIN, inde: false },
+  { name: "titulo4", fontSize: 12, fontStyle: "bold", margen: APA_MARGIN + APA_INDENT, inde: true },
+  { name: "titulo5", fontSize: 12, fontStyle: "bolditalic", margen: APA_MARGIN + APA_INDENT, inde: true },
+  { name: "parr", fontSize: 12, fontStyle: "normal", margen: APA_MARGIN, inde: true },
+  { name: "citaLarga", fontSize: 12, fontStyle: "normal", margen: APA_MARGIN + APA_INDENT, inde: false },
+  { name: "referencias", fontSize: 12, fontStyle: "normal", margen: APA_MARGIN, isRef: true },
+  { name: "lista", fontSize: 12, fontStyle: "normal", margen: APA_MARGIN + APA_INDENT, inde: false },
+  { name: "notaPie", fontSize: 10, fontStyle: "normal", margen: APA_MARGIN, isFootnote: true },
 ];
 
 const Func_tags = [
@@ -43,20 +33,9 @@ const Func_tags = [
   { name: "pagebreak" },
   { name: "Lorem" },
   { name: "Indice" },
-  {
-    name: "Introduccion",
-    fontSize: 12,
-    fontStyle: "normal",
-    margen: 20,
-    inde: true,
-  },
-  {
-    name: "Conclusion",
-    fontSize: 12,
-    margen: 20,
-    fontStyle: "normal",
-    inde: true,
-  },
+  { name: "Introduccion", fontSize: 12, fontStyle: "normal", margen: APA_MARGIN, inde: true },
+  { name: "Conclusion", fontSize: 12, fontStyle: "normal", margen: APA_MARGIN, inde: true },
+  { name: "Resumen", fontSize: 12, fontStyle: "normal", margen: APA_MARGIN, inde: false },
   { name: "Portada", fontStyle: "bold", fontSize: 12, margen: 105 },
 ];
 
@@ -98,26 +77,14 @@ if (Save) {
 // --- CONTADOR DE PALABRAS Y CARACTERES ---
 function updateCounts() {
   const text = editor.getValue();
-  let printableText = "";
+  
+  // Limpiar todas las etiquetas @nombre@ para contar solo el texto real
+  let cleanText = text.replace(/@\/?\w+@/g, " ");
+  // Limpiar el separador especial usado en portadas
+  cleanText = cleanText.replace(/-\|/g, " ");
+  // Normalizar los espacios
+  cleanText = cleanText.replace(/\s+/g, " ").trim();
 
-  // Regex corregido: Busca pares de etiquetas @tag@ ... @/tag@
-  // Captura el grupo 2 (el contenido interno)
-  // [\s\S] asegura que capture saltos de línea también
-  const tagRegex = /@(\w+)@([\s\S]*?)@\/\1@/g;
-  let match;
-
-  while ((match = tagRegex.exec(text)) !== null) {
-    let content = match[2];
-
-    // Limpieza adicional: Remover el separador especial -| usado en portadas y otros
-    content = content.replace(/-\|/g, " ");
-
-    // Acumular el contenido limpio
-    printableText += content + " ";
-  }
-
-  // Limpiar espacios múltiples y contar
-  const cleanText = printableText.replace(/\s+/g, " ").trim();
   const words = cleanText ? cleanText.split(" ").length : 0;
   const chars = cleanText.length;
 
@@ -181,21 +148,21 @@ function filterAutocomplete() {
 
 function insertTag(tag, lastHyphen, cursorPosition, isDirect = false) {
   let newLine;
+  const noCloseTags = ["linebreak", "pagebreak", "Lorem", "Indice", "notaPie"];
 
   if (isDirect) {
-    // Inserción directa desde toolbar (en la posición actual)
     const textToInsert =
       tag.name === "Lorem"
         ? `${Lorem[Math.floor(Math.random() * Lorem.length)]}`
+        : noCloseTags.includes(tag.name)
+        ? `@${tag.name}@\n`
         : `@${tag.name}@\n@/${tag.name}@`;
     editor.replaceRange(textToInsert, cursorPosition);
 
-    // Mover cursor dentro de la etiqueta
-    if (tag.name !== "Lorem") {
+    if (tag.name !== "Lorem" && !noCloseTags.includes(tag.name)) {
       editor.setCursor(cursorPosition.line + 1, 0);
     }
   } else {
-    // Inserción vía autocompletado (reemplazando el guión)
     const line = editor.getLine(cursorPosition.line);
     const beforeHyphen = line.slice(0, lastHyphen);
     const afterHyphen = line.slice(lastHyphen + 1 + tag.name.length);
@@ -203,6 +170,8 @@ function insertTag(tag, lastHyphen, cursorPosition, isDirect = false) {
       beforeHyphen +
       (tag.name === "Lorem"
         ? `${Lorem[Math.floor(Math.random() * Lorem.length)]}`
+        : noCloseTags.includes(tag.name)
+        ? `@${tag.name}@\n`
         : `@${tag.name}@\n@/${tag.name}@`) +
       afterHyphen;
     editor.replaceRange(
@@ -210,7 +179,9 @@ function insertTag(tag, lastHyphen, cursorPosition, isDirect = false) {
       { line: cursorPosition.line, ch: 0 },
       { line: cursorPosition.line, ch: line.length },
     );
-    editor.setCursor(cursorPosition.line + 1, 0);
+    if (tag.name !== "Lorem" && !noCloseTags.includes(tag.name)) {
+        editor.setCursor(cursorPosition.line + 1, 0);
+    }
   }
 
   editor.focus();
@@ -221,51 +192,66 @@ editor.on("keyup", handleKeyUp);
 editor.on("scroll", () => (autocompleteContainer.style.display = "none"));
 
 // --- PDF GENERATOR ---
-function generatePDF() {
+async function generatePDF() {
   const btn = document.getElementById("generateBtn");
   const originalText = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML =
     '<span class="material-symbols-outlined animate-spin mr-2">progress_activity</span> Generando...';
 
-  setTimeout(() => {
-    try {
-      localStorage.setItem("SAVE", editor.getValue());
-      indexEntries = [];
-      const doc = new jsPDF();
-      const margin = 20;
+  // Permitir a la UI actualizarse antes del proceso pesado
+  await new Promise(r => setTimeout(r, 50));
 
-      const contentPages = ProcessText(doc, margin);
+  try {
+    localStorage.setItem("SAVE", editor.getValue());
+    indexEntries = [];
+    const doc = new jsPDF();
+    const margin = 20;
 
-      if (Array.isArray(contentPages)) {
-        contentPages.forEach((Pagina, pageIndex) => {
-          if (pageIndex > 0) doc.addPage();
+    const contentPages = ProcessText(doc, margin);
 
-          Pagina.forEach((Linea) => {
-            const { line, Y, tag } = Linea;
-            if (!line) return;
-            doc.setFontSize(tag.fontSize || 12);
-            doc.setFont("times", tag.fontStyle || "normal");
-            doc.text(line, tag.margen, Y * 10 + 20, {
-              align: tag.align || "left",
-            });
-          });
-          addPageNumber(doc, pageIndex + 1);
+    let totalPages = doc.internal.getNumberOfPages();
+    let markdownState = { bold: false, italic: false };
+    let currentTagName = "";
+
+    if (Array.isArray(contentPages)) {
+      for (let pageIndex = 0; pageIndex < contentPages.length; pageIndex++) {
+        const Pagina = contentPages[pageIndex];
+        if (pageIndex > 0) doc.addPage();
+
+        Pagina.forEach((Linea) => {
+          const { line, Y, tag } = Linea;
+          if (!line) return;
+          
+          if (currentTagName !== tag.name) {
+             markdownState = { bold: false, italic: false };
+             currentTagName = tag.name;
+          }
+          
+          renderInlineStyles(doc, line, tag.margen || 25.4, Y * 10 + 15.4, {
+            align: tag.align || "left",
+            fontSize: tag.fontSize || 12,
+            fontStyle: tag.fontStyle || "normal"
+          }, markdownState);
         });
+        addPageNumber(doc, pageIndex + 1);
+        
+        // Pausar un microinstante cada 5 páginas para liberar la UI
+        if (pageIndex % 5 === 0) await new Promise(r => setTimeout(r, 0));
       }
-
-      const pdfBlob = doc.output("blob");
-      document.getElementById("preview").src = URL.createObjectURL(pdfBlob);
-      document.getElementById("empty-state").style.display = "none";
-      showToast("PDF Generado con éxito", "success");
-    } catch (error) {
-      console.error(error);
-      showToast("Error: " + error.message, "error");
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = originalText;
     }
-  }, 500);
+
+    const pdfBlob = doc.output("blob");
+    document.getElementById("preview").src = URL.createObjectURL(pdfBlob);
+    document.getElementById("empty-state").style.display = "none";
+    showToast("PDF Generado con éxito", "success");
+  } catch (error) {
+    console.error(error);
+    showToast("Error: " + error.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
 }
 
 function addPageNumber(doc, pageNumber) {
@@ -274,6 +260,104 @@ function addPageNumber(doc, pageNumber) {
   doc.text(`${pageNumber}`, doc.internal.pageSize.width - 15, 10, {
     align: "right",
   });
+}
+
+function renderInlineStyles(doc, text, x, y, options, state) {
+  if (!text.includes('*') && !state.bold && !state.italic) {
+    doc.setFont("times", options.fontStyle);
+    doc.setFontSize(options.fontSize);
+    doc.text(text, x, y, { align: options.align });
+    return;
+  }
+
+  let tokens = [];
+  let currentText = "";
+  
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === '*' && text[i+1] === '*') {
+      if (currentText) {
+        tokens.push({ text: currentText, bold: state.bold, italic: state.italic });
+        currentText = "";
+      }
+      state.bold = !state.bold;
+      i++; // skip second *
+    } else if (text[i] === '*') {
+      if (currentText) {
+        tokens.push({ text: currentText, bold: state.bold, italic: state.italic });
+        currentText = "";
+      }
+      state.italic = !state.italic;
+    } else {
+      currentText += text[i];
+    }
+  }
+  
+  if (currentText) {
+    tokens.push({ text: currentText, bold: state.bold, italic: state.italic });
+  }
+
+  let totalWidth = 0;
+  if (options.align === 'center' || options.align === 'right' || options.align === 'justify') {
+    tokens.forEach(t => {
+      let style = options.fontStyle;
+      if (t.bold && t.italic) style = "bolditalic";
+      else if (t.bold) style = "bold";
+      else if (t.italic) style = "italic";
+      doc.setFont("times", style);
+      doc.setFontSize(options.fontSize);
+      totalWidth += doc.getTextWidth(t.text);
+    });
+  }
+
+  let startX = x;
+  if (options.align === 'center') {
+    startX = x - (totalWidth / 2);
+  } else if (options.align === 'right' || options.align === 'justify') {
+    startX = x - totalWidth;
+  }
+
+  let currentX = startX;
+  tokens.forEach(t => {
+    let style = options.fontStyle;
+    if (options.fontStyle === "bold" || options.fontStyle === "italic" || options.fontStyle === "bolditalic") {
+       if (t.bold && t.italic) style = "bolditalic";
+       else if (t.bold && options.fontStyle === "italic") style = "bolditalic";
+       else if (t.italic && options.fontStyle === "bold") style = "bolditalic";
+       else if (t.bold) style = "bold";
+       else if (t.italic) style = "italic";
+    } else {
+       if (t.bold && t.italic) style = "bolditalic";
+       else if (t.bold) style = "bold";
+       else if (t.italic) style = "italic";
+    }
+
+    doc.setFont("times", style);
+    doc.setFontSize(options.fontSize);
+    doc.text(t.text, currentX, y, { align: "left" });
+    currentX += doc.getTextWidth(t.text);
+  });
+}
+
+function wrapText(doc, text, firstLineW, otherLineW) {
+    let tokens = text.split(" ");
+    let lines = [];
+    let currentLine = "";
+    let widthLimit = firstLineW;
+
+    for (let i = 0; i < tokens.length; i++) {
+        let testLine = currentLine ? currentLine + " " + tokens[i] : tokens[i];
+        let cleanLine = testLine.replace(/\*/g, ""); // Safely measure without markdown fake extensions
+
+        if (doc.getTextWidth(cleanLine) > widthLimit && currentLine) {
+            lines.push(currentLine);
+            currentLine = tokens[i];
+            widthLimit = otherLineW;
+        } else {
+            currentLine = testLine;
+        }
+    }
+    if (currentLine) lines.push(currentLine);
+    return lines.length ? lines : [""];
 }
 
 function ProcessText(doc, margin) {
@@ -288,25 +372,54 @@ function ProcessText(doc, margin) {
       if (line.includes(`@${tag.name}@`)) {
         let j = 1;
         let tagContent = "";
-        while (
-          lines[index + j] !== undefined &&
-          !lines[index + j].includes(`@/${tag.name}@`)
-        ) {
-          tagContent += lines[index + j] + " ";
-          j++;
+        
+        // Evitar que etiquetas sin cierre devoren el resto del documento
+        if (!["pagebreak", "linebreak", "Indice"].includes(tag.name)) {
+          while (
+            lines[index + j] !== undefined &&
+            !lines[index + j].includes(`@/${tag.name}@`)
+          ) {
+            tagContent += lines[index + j] + " ";
+            j++;
+          }
         }
-        const indent = tag.inde ? "           " : "";
+        const indent = ""; // Removemos los falsos espacios, calculamos coordenadamente
+
         const partes = tagContent.trim().split("-|");
         const objetoPartes = partes.reduce((acc, parte, i) => {
           acc[`parte${i + 1}`] = indent + parte.trim();
           return acc;
         }, {});
 
+        // Ajuste rígido de anchos APA
+        let anchoCalculado = doc.internal.pageSize.width - 50.8; // Márgenes de 25.4 a cada lado
+        
+        // Coordenadas dinámicas de inicio de renglón
+        let firstW = anchoCalculado;
+        let otherW = anchoCalculado;
+        
+        if (tag.inde) {
+            firstW = anchoCalculado - 12.7; 
+        } else if (tag.name === "citaLarga") {
+            firstW = anchoCalculado - 12.7;
+            otherW = anchoCalculado - 12.7;
+        } else if (tag.name === "lista") {
+            firstW = anchoCalculado - 12.7;
+            otherW = anchoCalculado - 19.05; // .25 pulgadas más del left
+        } else if (tag.name === "referencias") {
+            firstW = anchoCalculado;
+            otherW = anchoCalculado - 12.7;
+        }
+
         for (let key in objetoPartes) {
-          objetoPartes[key] = doc.splitTextToSize(
-            objetoPartes[key],
-            usableWidth,
-          );
+          doc.setFont("times", tag.fontStyle || "normal");
+          doc.setFontSize(tag.fontSize || 12);
+          if (tag.name === "parr") {
+             // Defer wrapText to organizeTextByPages so inline titles can affect the first line
+             objetoPartes[key] = [objetoPartes[key]];
+          } else {
+             objetoPartes[key] = wrapText(doc, objetoPartes[key], firstW, otherW);
+          }
         }
         Textoo.push({ text: objetoPartes, tag, Id: CurrentId++ });
       }
@@ -330,10 +443,12 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
       Indi: false,
       Conclu: false,
       Port: false,
+      Ref: false,
+      Resu: false, // Etiqueta APA Resumen
     };
 
     Object.values(text).forEach((lines) => {
-      lines.forEach((line) => {
+      lines.forEach((line, lineIdx) => {
         if (currentLineCount >= maxLinesPerPage) {
           pages.push(currentPage);
           currentPage = [];
@@ -421,58 +536,134 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
             currentLineCount = 0;
             break;
 
-          case "parr":
-            if (Retraso.ParResi) {
-              let Split = Retraso.ParResi.toString() + " " + line;
-              if (
-                docc.getTextWidth(Retraso.ParResi) <
-                docc.internal.pageSize.width + 40
-              ) {
-                let splitText = docc.splitTextToSize(
-                  Split,
-                  docc.internal.pageSize.width + 40,
-                );
-                Split = splitText[0];
-                Retraso.ParResi = splitText.slice(1).join(" ");
-                line = "";
-              }
-              currentPage.push({ line: Split, Y: currentLineCount + 1, tag });
-              currentLineCount++;
+          case "citaLarga":
+            currentPage.push({ line, Y: currentLineCount + 1, tag: { ...tag, margen: 35 } });
+            currentLineCount++;
+            break;
+
+          case "referencias":
+            if (!OnePagueEtiq.Ref) {
+              if (currentPage.length > 0) pages.push(currentPage);
+              currentPage = [];
+              currentLineCount = 0;
+              currentPage.push({
+                line: "Referencias",
+                Y: 1,
+                tag: {
+                  fontSize: 12,
+                  fontStyle: "bold",
+                  margen: 105,
+                  align: "center",
+                },
+              });
+              currentLineCount = 2;
+              indexEntries.push({ title: "Referencias", page: pages.length + 1, level: 1 });
+              OnePagueEtiq.Ref = true;
             }
+            
+            // APA Hanging Indent: line 0 = 25.4 (1 inch), others = 38.1 (+1.27cm)
+            let refMargen = (lineIdx === 0) ? 25.4 : 38.1;
+            currentPage.push({ line, Y: currentLineCount + 1, tag: { ...tag, margen: refMargen } });
+            currentLineCount++;
+            break;
+
+          case "lista":
+            // APA Lista: Viñeta a 38.1 en coords, texto a 44.45 (+0.63)
+            let listMargen = (lineIdx === 0) ? 38.1 : 44.45; 
+            let listLine = (lineIdx === 0) ? "• " + line : line;
+            currentPage.push({ line: listLine, Y: currentLineCount + 1, tag: { ...tag, margen: listMargen } });
+            currentLineCount++;
+            break;
+            
+          case "notaPie":
+            if (lineIdx === 0) {
+               currentPage.push({ line: "__________________", Y: currentLineCount + 1, tag: { ...tag, fontSize: 12 } });
+               currentLineCount++;
+               line = "¹ " + line;
+            }
+            currentPage.push({ line, Y: currentLineCount + 1, tag });
+            currentLineCount++;
+            break;
+
+          case "parr":
+            docc.setFontSize(tag.fontSize || 12);
+            docc.setFont("times", tag.fontStyle || "normal");
+
             if (Retraso.Tx) {
               currentLineCount--;
-              const initialIndent = " ".repeat(
-                Math.ceil(
-                  (docc.getTextWidth(Retraso.Tx.trim()) * 1.2) /
-                    docc.getTextWidth(" "),
-                ),
-              );
-              line = initialIndent + line;
-              let splitText = docc.splitTextToSize(
-                line,
-                docc.internal.pageSize.width + 40,
-              );
+              
+              // Cambio a la fuente del título para medir su ANCHO REAL y evitar colisiones
+              docc.setFontSize(Retraso.tag.fontSize || 12);
+              docc.setFont("times", Retraso.tag.fontStyle || "bold");
+              let titleMargin = Retraso.tag.margen;
+              let titleTextWidth = docc.getTextWidth(Retraso.Tx.replace(/\*/g, "").trim());
+              
+              // Regresamos a la fuente de párrafo
+              docc.setFontSize(tag.fontSize || 12);
+              docc.setFont("times", tag.fontStyle || "normal");
+              
+              // Insertamos gramaticalmente el ancho perfecto de 1 espacio en blando
+              let spaceWidth = docc.getTextWidth(" ");
+              let startX = titleMargin + titleTextWidth + Math.max(spaceWidth, 1.5);
+              
+              let firstWordW = docc.internal.pageSize.width - 25.4 - startX;
+              let otherLineW = docc.internal.pageSize.width - 50.8;
+              let splits = wrapText(docc, line, firstWordW, otherLineW);
+              
               Retraso.Tx = "";
-              Retraso.ParResi = splitText.slice(1).join(" ");
-              line = splitText[0];
-            }
-            if (line !== "") {
-              currentPage.push({ line, Y: currentLineCount + 1, tag });
-              currentLineCount++;
+              
+              splits.forEach((s, idx) => {
+                 if (s && s.trim() !== "") {
+                    // Verificación de límite de hoja por desbordamiento dinámico
+                    if (currentLineCount >= maxLinesPerPage) {
+                       pages.push(currentPage);
+                       currentPage = [];
+                       currentLineCount = 0;
+                    }
+                    let curMargen = (idx === 0) ? startX : tag.margen;
+                    currentPage.push({ line: s, Y: currentLineCount + 1, tag: { ...tag, margen: curMargen } });
+                    currentLineCount++;
+                 }
+              });
+            } else {
+              let firstWordW = docc.internal.pageSize.width - 50.8;
+              let otherLineW = docc.internal.pageSize.width - 50.8;
+              if (tag.inde) firstWordW -= 12.7;
+              
+              let splits = wrapText(docc, line, firstWordW, otherLineW);
+              
+              splits.forEach((s, idx) => {
+                 if (s && s.trim() !== "") {
+                    // Verificación de límite de hoja por desbordamiento dinámico
+                    if (currentLineCount >= maxLinesPerPage) {
+                       pages.push(currentPage);
+                       currentPage = [];
+                       currentLineCount = 0;
+                    }
+                    let curMargen = tag.margen;
+                    if (idx === 0 && tag.inde) curMargen += 12.7;
+                    
+                    currentPage.push({ line: s, Y: currentLineCount + 1, tag: { ...tag, margen: curMargen } });
+                    currentLineCount++;
+                 }
+              });
             }
             break;
 
+          case "Resumen":
           case "Introduccion":
           case "Conclusion":
             if (
               (tag.name === "Introduccion" && !OnePagueEtiq.Intro) ||
-              (tag.name === "Conclusion" && !OnePagueEtiq.Conclu)
+              (tag.name === "Conclusion" && !OnePagueEtiq.Conclu) ||
+              (tag.name === "Resumen" && !OnePagueEtiq.Resu)
             ) {
               if (currentPage.length > 0) pages.push(currentPage);
               currentPage = [];
               currentLineCount = 0;
               let title =
-                tag.name === "Introduccion" ? "Introducción" : "Conclusión";
+                tag.name === "Introduccion" ? "Introducción" : 
+                tag.name === "Conclusion" ? "Conclusión" : "Resumen";
               currentPage.push({
                 line: title,
                 Y: 1,
@@ -486,9 +677,14 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
               currentLineCount = 2;
               indexEntries.push({ title, page: pages.length + 1, level: 1 });
               if (tag.name === "Introduccion") OnePagueEtiq.Intro = true;
-              else OnePagueEtiq.Conclu = true;
+              else if (tag.name === "Conclusion") OnePagueEtiq.Conclu = true;
+              else OnePagueEtiq.Resu = true;
             }
-            currentPage.push({ line, Y: currentLineCount + 1, tag });
+            let blockMargen = tag.margen;
+            if (lineIdx === 0 && tag.inde) {
+               blockMargen += 12.7;
+            }
+            currentPage.push({ line, Y: currentLineCount + 1, tag: { ...tag, margen: blockMargen } });
             currentLineCount++;
             break;
 
@@ -498,6 +694,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
             currentPage.push({ line, Y: currentLineCount + 1, tag });
             currentLineCount++;
             Retraso.Tx = line;
+            Retraso.tag = tag;
             if (IdCurrent != Id) {
               indexEntries.push({
                 title: line.trim(),
@@ -505,6 +702,18 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
                 level: 3,
               });
             }
+            break;
+
+          case "pagebreak":
+            if (currentPage.length > 0) pages.push(currentPage);
+            currentPage = [];
+            currentLineCount = 0;
+            Retraso.Tx = "";
+            break;
+
+          case "linebreak":
+            currentLineCount++;
+            Retraso.Tx = "";
             break;
 
           default:
@@ -526,7 +735,7 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
     });
 
     if (
-      ["Portada", "Indice", "Introduccion", "Conclusion"].includes(tag.name)
+      ["Portada", "Indice", "Introduccion", "Conclusion", "Resumen"].includes(tag.name)
     ) {
       if (currentPage.length > 0) {
         pages.push(currentPage);
@@ -542,6 +751,22 @@ function organizeTextByPages(Textoo, maxLinesPerPage, docc) {
 function AggIndice(pages, doc, placeholderIndex) {
   if (placeholderIndex === -1) return pages;
 
+  // 1. Calcular cuántas páginas extras ocupará el índice
+  const entriesPerPage = 23; // Y máximo 25 - Y inicial 2 = 23 entradas
+  const numIndexPages = Math.ceil(indexEntries.length / entriesPerPage) || 1;
+  const extraPages = numIndexPages - 1;
+
+  // 2. Corregir los números de página secuenciados antes de generar
+  if (extraPages > 0) {
+    indexEntries.forEach((e) => {
+      // Si la página en la que se generó estaba después del índice, se desplaza
+      if (e.page > placeholderIndex + 1) {
+        e.page += extraPages;
+      }
+    });
+  }
+
+  // 3. Organizar las celdas y filas del índice
   let indexPages = [];
   let currentIdxPage = [
     {
@@ -555,38 +780,55 @@ function AggIndice(pages, doc, placeholderIndex) {
   indexEntries.forEach((entry) => {
     if (yCounter > 25) {
       indexPages.push(currentIdxPage);
-      currentIdxPage = [];
-      yCounter = 2;
+      currentIdxPage = [
+        { line: "Índice (Cont.)", Y: 1, tag: { fontSize: 12, fontStyle: "italic", margen: 105, align: "center" } }
+      ];
+      yCounter = 3;
     }
-    const indent =
-      entry.level === 2 ? "    " : entry.level === 3 ? "        " : "";
-    const cleanTitle =
-      entry.title.length > 40
-        ? entry.title.substring(0, 37) + "..."
-        : entry.title;
+    // Filtrar formato markdown para evitar corrupción lógica en el Índice
+    const rawTitle = entry.title.replace(/\*/g, "").trim();
 
-    let dots = doc.splitTextToSize(
-      indent + cleanTitle + "......".repeat(28),
-      doc.internal.pageSize.width + 40,
-    );
-    let textLine = dots[0] + " " + entry.page;
+    doc.setFontSize(11);
+    doc.setFont("times", "normal");
+    
+    // Cálculo de márgenes escalonados según Normas APA (1.27 cm o ~12.7 mm)
+    const apaIndent = 12.7;
+    const currentIndent = 20 + (entry.level > 1 ? (entry.level - 1) * apaIndent : 0);
+    
+    // Cálculo seguro de anchos relativos
+    const dotWidth = doc.getTextWidth(".");
+    const pageNumStr = " " + entry.page.toString();
+    const fixWidth = doc.getTextWidth(pageNumStr);
+    const usableWidth = doc.internal.pageSize.width - 20 - currentIndent; // Ancho considerando el salto a la derecha
+    
+    let currentTitle = rawTitle;
+    let titleWidth = doc.getTextWidth(currentTitle);
+    
+    // Truncar con elipsis si el título por sí solo sobrepasa la longitud permitida
+    if (titleWidth > usableWidth - fixWidth - 10) {
+      while (doc.getTextWidth(currentTitle + "...") > usableWidth - fixWidth - 10 && currentTitle.length > 0) {
+        currentTitle = currentTitle.slice(0, -1);
+      }
+      currentTitle += "...";
+      titleWidth = doc.getTextWidth(currentTitle);
+    }
+    
+    // Rellenamos el vacío sobrante con punteado iterativo matemático
+    const gap = usableWidth - titleWidth - fixWidth;
+    const numDots = Math.max(0, Math.floor(gap / dotWidth));
+    
+    let textLine = rawTitle.length > 0 ? currentTitle + ".".repeat(numDots) + pageNumStr : currentTitle;
 
     currentIdxPage.push({
       line: textLine,
       Y: yCounter++,
-      tag: { fontSize: 11, fontStyle: "normal", margen: 20, align: "left" },
+      tag: { fontSize: 11, fontStyle: "normal", margen: currentIndent, align: "left" },
     });
   });
-  indexPages.push(currentIdxPage);
+  
+  if (currentIdxPage.length > 0) indexPages.push(currentIdxPage);
 
-  const extraPages = indexPages.length - 1;
-  if (extraPages > 0) {
-    indexEntries.forEach((e) => {
-      if (e.page > placeholderIndex + 1) e.page += extraPages;
-    });
-    return AggIndice(pages, doc, placeholderIndex);
-  }
-
+  // 4. Reemplazar el placeholder por las páginas del índice y retornar
   pages.splice(placeholderIndex, 1, ...indexPages);
   return pages;
 }
