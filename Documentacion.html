@@ -17,14 +17,15 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#6366f1", // Indigo 500
-                        secondary: "#4f46e5", // Indigo 600
-                        "background-light": "#f8fafc", // Slate 50
-                        "background-dark": "#0f172a", // Slate 900
+                        primary: "#138a07", // verde Overleaf (coincide con la app)
+                        secondary: "#0c6304",
+                        "primary-light": "#4ade80",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#090d16",
                         "surface-light": "#ffffff",
-                        "surface-dark": "#1e293b", // Slate 800
-                        "border-light": "#e2e8f0", // Slate 200
-                        "border-dark": "#334155", // Slate 700
+                        "surface-dark": "#111827",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#1f2937"
                     },
                     fontFamily: {
                         sans: ["Inter", "sans-serif"],
@@ -94,25 +95,27 @@
             <h3 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4">Contenido</h3>
             <nav id="toc" class="space-y-1 border-l-2 border-slate-200 dark:border-slate-800">
                 <a href="#intro" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">1. Introducción</a>
-                <a href="#interfaz" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">2. Interfaz de Usuario</a>
-                <a href="#uso" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">3. Cómo Utilizar</a>
-                <a href="#etiquetas-texto" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">4. Etiquetas de Texto</a>
-                <a href="#etiquetas-func" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">5. Etiquetas de Función</a>
-                <a href="#autocompletado" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">6. Autocompletado</a>
-                <a href="#ejemplos" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">7. Ejemplos Prácticos</a>
-                <a href="#tips" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">8. Consejos y Solución</a>
+                <a href="#interfaz" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">2. Interfaz y Modos de Trabajo</a>
+                <a href="#modo-visual" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent font-medium text-primary dark:text-emerald-400">3. Modo Visual Interactivo</a>
+                <a href="#uso" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">4. Estructura y Sintaxis Básica</a>
+                <a href="#etiquetas-texto" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">5. Etiquetas de Jerarquía (Texto)</a>
+                <a href="#format-tags" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">6. Subformatos (Negrita / Cursiva)</a>
+                <a href="#etiquetas-func" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">7. Etiquetas de Estructura</a>
+                <a href="#autocompletado" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">8. Autocompletado y Atajos</a>
+                <a href="#ejemplos" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">9. Ejemplos Prácticos</a>
+                <a href="#tips" class="toc-link block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l-2 -ml-[2px] border-transparent">10. Consejos y Solución</a>
             </nav>
         </aside>
 
         <main class="flex-1 max-w-4xl space-y-16 pb-20">
             
-            <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
+            <div class="bg-gradient-to-br from-emerald-700 to-purple-700 rounded-2xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
                 <div class="absolute right-0 top-0 -mr-16 -mt-16 opacity-10">
                     <span class="material-symbols-outlined text-[250px]">picture_as_pdf</span>
                 </div>
                 <div class="relative z-10">
                     <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Guía de Usuario Oficial</h1>
-                    <p class="text-indigo-100 text-lg max-w-2xl">Aprende a dominar el motor de renderizado CodePDF para crear documentos académicos y profesionales con formato APA estructural.</p>
+                    <p class="text-emerald-100 text-lg max-w-2xl">Aprende a dominar el motor de renderizado CodePDF para crear documentos académicos y profesionales con formato APA estructural.</p>
                 </div>
             </div>
 
@@ -126,14 +129,14 @@
                 
                 <div class="grid sm:grid-cols-2 gap-4 mt-6">
                     <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark p-5 rounded-xl flex gap-4">
-                        <div class="bg-indigo-100 dark:bg-indigo-500/20 text-primary p-3 rounded-lg h-fit"><span class="material-symbols-outlined">sell</span></div>
+                        <div class="bg-emerald-100 dark:bg-emerald-600/20 text-primary p-3 rounded-lg h-fit"><span class="material-symbols-outlined">sell</span></div>
                         <div>
                             <h4 class="font-semibold text-slate-900 dark:text-white mb-1">Sistema de Etiquetas</h4>
                             <p class="text-sm text-slate-500 dark:text-slate-400">Define estructura jerárquica sin preocuparte por el diseño visual.</p>
                         </div>
                     </div>
                     <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark p-5 rounded-xl flex gap-4">
-                        <div class="bg-indigo-100 dark:bg-indigo-500/20 text-primary p-3 rounded-lg h-fit"><span class="material-symbols-outlined">bolt</span></div>
+                        <div class="bg-emerald-100 dark:bg-emerald-600/20 text-primary p-3 rounded-lg h-fit"><span class="material-symbols-outlined">bolt</span></div>
                         <div>
                             <h4 class="font-semibold text-slate-900 dark:text-white mb-1">Motor Instantáneo</h4>
                             <p class="text-sm text-slate-500 dark:text-slate-400">Renderizado en tiempo real directamente en tu navegador vía jsPDF.</p>
@@ -144,32 +147,193 @@
 
             <section id="interfaz" class="scroll-mt-24 space-y-6">
                 <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span class="text-primary">#</span> Interfaz de Usuario
+                    <span class="text-primary">#</span> Interfaz y Modos de Trabajo
                 </h2>
-                <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl p-6">
-                    <ul class="space-y-4">
-                        <li class="flex gap-4">
-                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center font-bold text-sm">1</div>
-                            <div>
-                                <h4 class="font-semibold text-slate-900 dark:text-white">Editor de Código (Izquierda)</h4>
-                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Basado en CodeMirror con tema Monokai integrado. Aquí es donde escribes tu contenido y aplicas las etiquetas lógicas.</p>
-                            </div>
-                        </li>
-                        <li class="flex gap-4">
-                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center font-bold text-sm">2</div>
-                            <div>
-                                <h4 class="font-semibold text-slate-900 dark:text-white">Vista Previa (Derecha)</h4>
-                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">El visor de PDF nativo embebido. Se actualiza cada vez que presionas "Generar Documento".</p>
-                            </div>
-                        </li>
-                        <li class="flex gap-4">
-                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center font-bold text-sm">3</div>
-                            <div>
-                                <h4 class="font-semibold text-slate-900 dark:text-white">Barra de Herramientas</h4>
-                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Botones de acceso rápido para insertar títulos, párrafos y saltos sin tener que tipear el código completo.</p>
-                            </div>
-                        </li>
+                <p class="text-slate-600 dark:text-slate-300">CodePDF adopta una arquitectura de estudio inspirada en plataformas profesionales como Overleaf, dividida en dos paneles principales redimensionables y dos modalidades de trabajo totalmente sincronizadas:</p>
+                
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark p-5 rounded-xl shadow-xs">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-600/20 text-primary flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">sync_alt</span>
+                        </div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-1">Doble Modo (Fuente / Visual)</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Alterna libremente entre el editor de código directo y las tarjetas visuales interactivas con sincronización bidireccional automática.</p>
+                    </div>
+
+                    <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark p-5 rounded-xl shadow-xs">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-600/20 text-primary flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">edit_note</span>
+                        </div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-1">Editor Principal (Izquierda)</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">En modo <em>Fuente</em>: CodeMirror con Monokai y autocompletado predictivo. En modo <em>Visual</em>: bloques interactivos con simulación APA en vivo.</p>
+                    </div>
+
+                    <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark p-5 rounded-xl shadow-xs">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-600/20 text-primary flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">drag_indicator</span>
+                        </div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-1">Divisor Arrastrable (Splitter)</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Arrastra la línea divisoria vertical para expandir el editor o ampliar la previsualización del documento a tu gusto.</p>
+                    </div>
+
+                    <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark p-5 rounded-xl shadow-xs">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-600/20 text-primary flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">picture_as_pdf</span>
+                        </div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-1">Visor PDF Nativo (Derecha)</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Previsualiza el PDF generado al presionar <kbd>Ctrl+Enter</kbd> o el botón <em>Generar Documento</em>, con descarga inmediata a tu equipo.</p>
+                    </div>
+
+                    <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark p-5 rounded-xl shadow-xs">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-600/20 text-primary flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">dock_to_left</span>
+                        </div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-1">Barra Lateral de Utilidades</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Acceso a abrir archivos <code>.txt</code> locales, guardar progreso (<kbd>Ctrl+S</kbd>), descargar el código fuente (.txt) y ver la guía oficial.</p>
+                    </div>
+
+                    <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark p-5 rounded-xl shadow-xs">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-600/20 text-primary flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">cloud_done</span>
+                        </div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-1">Autoguardado y Tema</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Indicador en vivo de estado guardado en el navegador, conmutador de tema claro/oscuro y contador de palabras y caracteres.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="modo-visual" class="scroll-mt-24 space-y-6">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-primary">#</span> Modo Visual y Bloques Interactivos
+                </h2>
+                <p class="text-slate-600 dark:text-slate-300">
+                    El <strong>Modo Visual</strong> convierte tu documento en una colección de tarjetas interactivas que simulan el diseño real de las normas APA 7 (sangrías de primera línea, sangría francesa en bibliografía, citas en bloque y alineaciones). Te permite redactar y maquetar sin necesidad de escribir etiquetas manualmente.
+                </p>
+
+                <!-- Subsección 1: Pegado Inteligente -->
+                <div class="p-6 rounded-xl border border-primary/20 dark:border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center shrink-0 shadow-sm">
+                            <span class="material-symbols-outlined">content_paste_go</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">1. Pegado Inteligente (Smart Paste)</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Convierte texto plano de corrido en un documento APA estructurado de un solo clic.</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                        Presiona el botón <strong>Pegar Texto Completo</strong> en la barra superior del modo visual, pega todo el texto de tu borrador (desde Word, Google Docs, apuntes o IA) y pulsa <strong>Reemplazar y Estructurar Todo</strong>. El clasificador heurístico detecta e identifica automáticamente:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-1 text-xs font-medium">
+                        <div class="p-3 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-amber-500 text-base">badge</span>
+                            <span><strong>Portada:</strong> Universidad, título, autor y año</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-blue-500 text-base">short_text</span>
+                            <span><strong>Resumen</strong> y Palabras Clave</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-purple-500 text-base">article</span>
+                            <span><strong>Introducción</strong> y Conclusiones</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-emerald-500 text-base">title</span>
+                            <span><strong>Títulos 1 a 5</strong> (detecta 1., 1.1, etc.)</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-rose-500 text-base">format_quote</span>
+                            <span><strong>Citas Largas</strong> (+40 palabras)</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-teal-500 text-base">menu_book</span>
+                            <span><strong>Referencias APA</strong> (Apellido, N., Año)</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        <em>Tip:</em> Si ya tienes bloques cargados y deseas que el motor vuelva a analizarlos y clasificarlos automáticamente, pulsa el botón <strong>Auto-detectar</strong> (<span class="material-symbols-outlined text-xs align-middle">magic_button</span>).
+                    </p>
+                </div>
+
+                <!-- Subsección 2: Menú Flotante por Selección de Ratón -->
+                <div class="p-6 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 dark:text-purple-400 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined">ads_click</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">2. Menú Flotante por Selección de Ratón</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Aplica etiquetas y formatos a partes específicas de un texto con solo seleccionarlas.</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                        En el modo visual, cuando seleccionas con el ratón cualquier fragmento de texto dentro de una tarjeta, aparece inmediatamente una <strong>barra flotante justo sobre el cursor</strong>:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-slate-600 dark:text-slate-300 ml-2">
+                        <li><strong>Dividir y convertir en etiqueta:</strong> Haz clic en <em>Título 1, Título 2, Cita Larga, Referencia, etc.</em> y el sistema dividirá automáticamente el bloque en tres partes: el texto previo, la selección convertida en su nueva etiqueta APA, y el texto posterior.</li>
+                        <li><strong>Formato en línea (Inline):</strong> Pulsa los botones <strong>B</strong> (Negrita) o <em>I</em> (Cursiva) para envolver la selección con <code>**</code> o <code>*</code> al instante.</li>
                     </ul>
+                </div>
+
+                <!-- Subsección 3: Modo Brocha 1-Clic -->
+                <div class="p-6 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined">format_paint</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">3. Herramienta Brocha 1-Clic</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Aplica el mismo formato a múltiples bloques rápidamente con un solo toque.</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                        En la sub-barra superior del modo visual encontrarás los chips de la <strong>Brocha 1-Clic</strong>:
+                    </p>
+                    <ol class="list-decimal list-inside space-y-1.5 text-sm text-slate-600 dark:text-slate-300 ml-2">
+                        <li>Selecciona una etiqueta en la barra (ej. <em>Título 2</em> o <em>Cita Larga</em>).</li>
+                        <li>El cursor cambiará a un puntero interactivo y las tarjetas mostrarán un borde verde al pasar el ratón.</li>
+                        <li>Haz clic sobre cualquier tarjeta: se transformará inmediatamente al formato elegido.</li>
+                        <li>Para salir del modo brocha, selecciona <strong>Cursor Normal</strong> o presiona <kbd>Esc</kbd>.</li>
+                    </ol>
+                </div>
+
+                <!-- Subsección 4: Control de Tarjetas de Bloques -->
+                <div class="p-6 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 dark:text-blue-400 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined">view_agenda</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">4. Gestión y Reordenamiento de Bloques</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Estructura y reordena las secciones de tu trabajo sin lidiar con código.</p>
+                        </div>
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-3 text-sm text-slate-600 dark:text-slate-300">
+                        <div class="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-border-light dark:border-border-dark">
+                            <span class="material-symbols-outlined text-primary text-base mt-0.5">swap_vert</span>
+                            <div>
+                                <strong class="text-slate-900 dark:text-white">Mover Arriba / Abajo:</strong> Modifica la secuencia de cualquier párrafo o título con los botones de flecha.
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-border-light dark:border-border-dark">
+                            <span class="material-symbols-outlined text-primary text-base mt-0.5">call_merge</span>
+                            <div>
+                                <strong class="text-slate-900 dark:text-white">Fusionar Bloques:</strong> Une el bloque actual con el siguiente para unificar párrafos divididos por error.
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-border-light dark:border-border-dark">
+                            <span class="material-symbols-outlined text-rose-500 text-base mt-0.5">delete</span>
+                            <div>
+                                <strong class="text-slate-900 dark:text-white">Eliminar Bloque:</strong> Retira cualquier tarjeta con confirmación limpia y sin desconfigurar el documento.
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-border-light dark:border-border-dark">
+                            <span class="material-symbols-outlined text-emerald-500 text-base mt-0.5">add_circle</span>
+                            <div>
+                                <strong class="text-slate-900 dark:text-white">Insertar Bloques:</strong> Añade nuevos párrafos o títulos en cualquier posición intermedia o al final.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -247,6 +411,16 @@ Autor: Estudiante</span>
                                 <td class="p-4">Nivel 3</td>
                             </tr>
                             <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">@titulo5@</code></td>
+                                <td class="p-4">Con Sangría de párrafo, Negrita Cursiva. (Añade punto final)</td>
+                                <td class="p-4">Nivel 3</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">@subTitulo@</code></td>
+                                <td class="p-4">Centrado, Negrita Cursiva.</td>
+                                <td class="p-4">Nivel 1</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
                                 <td class="p-4"><code class="text-pink-500 font-mono">@parr@</code></td>
                                 <td class="p-4">Fuente normal, alineación izquierda con sangría en la primera línea.</td>
                                 <td class="p-4 text-slate-400">No se incluye</td>
@@ -263,12 +437,17 @@ Autor: Estudiante</span>
                             </tr>
                             <tr class="bg-surface-light dark:bg-surface-dark">
                                 <td class="p-4"><code class="text-pink-500 font-mono">@lista@</code></td>
-                                <td class="p-4">Crea una lista de viñetas. Para separar cada elemento de otra viñeta utilza el separador <code>-|</code>.</td>
+                                <td class="p-4">Crea una lista de viñetas. Cada línea y cada separador <code>-|</code> generan un nuevo elemento con su viñeta.</td>
                                 <td class="p-4 text-slate-400">No se incluye</td>
                             </tr>
                             <tr class="bg-surface-light dark:bg-surface-dark">
                                 <td class="p-4"><code class="text-pink-500 font-mono">@notaPie@</code></td>
                                 <td class="p-4">Genera una línea divisoria y un número de referencia (¹) en un tamaño de letra reducido para anotaciones breves.</td>
+                                <td class="p-4 text-slate-400">No se incluye</td>
+                            </tr>
+                            <tr class="bg-surface-light dark:bg-surface-dark">
+                                <td class="p-4"><code class="text-pink-500 font-mono">@palabrasClave@</code></td>
+                                <td class="p-4">Añade la línea APA de "Palabras clave:" del resumen, en <em>cursiva</em> y con sangría de primera línea, como pide la séptima edición. Escríbelo justo después del <code>@Resumen@</code>.</td>
                                 <td class="p-4 text-slate-400">No se incluye</td>
                             </tr>
                         </tbody>
@@ -278,7 +457,7 @@ Autor: Estudiante</span>
             
             <section id="format-tags" class="mb-12 scroll-mt-20">
                 <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
-                    <span class="material-symbols-outlined mr-2 text-indigo-500">text_format</span>
+                    <span class="material-symbols-outlined mr-2 text-emerald-600">text_format</span>
                     Etiquetas Internas (Sub-Formatos)
                 </h2>
                 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden transition-colors">
@@ -317,7 +496,7 @@ Autor: Estudiante</span>
                             <span class="text-slate-400 font-bold">...</span>
                             <code class="text-amber-600 dark:text-amber-500 font-mono font-bold bg-amber-500/10 px-2 py-1 rounded">@/Portada@</code>
                         </div>
-                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">Genera una hoja de presentación. Usa <code>-|</code> para separar líneas. Los primeros 2 elementos se centran arriba, el resto se alinea a la derecha abajo.</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">Genera una hoja de presentación. Usa <code>-|</code> (o un salto de línea) para separar campos: el primero es la institución, el segundo el título y el resto son autores, filial, curso, profesor y fecha. El <strong>título va en negrita a tres renglones dobles del margen superior</strong> y el resto de los campos se <strong>reparte con huecos iguales de arriba abajo hasta el margen inferior</strong>, de modo que la portada ocupa el 100% de la hoja sin importar cuántos elementos escribas.</p>
                     </div>
                     <div class="p-5 border border-border-light dark:border-border-dark rounded-xl bg-surface-light dark:bg-surface-dark">
                         <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -347,20 +526,50 @@ Autor: Estudiante</span>
 
             <section id="autocompletado" class="scroll-mt-24 space-y-6">
                 <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span class="text-primary">#</span> El Menú de Autocompletado
+                    <span class="text-primary">#</span> Autocompletado y Atajos de Teclado
                 </h2>
                 <div class="flex flex-col md:flex-row gap-6 items-start">
                     <div class="flex-1 text-slate-600 dark:text-slate-300 space-y-4">
-                        <p>Para agilizar la escritura, el editor incluye un menú flotante predictivo.</p>
-                        <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li>Escribe un guion <code>-</code> en cualquier parte del editor.</li>
-                            <li>Comienza a escribir el nombre de la etiqueta (ej. <code>-por</code> para Portada).</li>
-                            <li>Haz clic en la sugerencia. El editor insertará automáticamente las etiquetas de apertura y cierre y colocará el cursor dentro.</li>
+                        <p>En el <strong>Modo Fuente</strong>, el editor integra un autocompletado predictivo ultrarrápido y una barra superior con chips de acceso directo:</p>
+                        <ul class="list-disc list-inside space-y-2 ml-4 text-sm">
+                            <li>Escribe un guion <code>-</code> al inicio de una línea o después de un espacio (dentro de palabras comunes no se activa).</li>
+                            <li>Continúa con las primeras letras de la etiqueta (ej. <code>-por</code> para Portada, <code>-parr</code> para Párrafo, <code>-ref</code> para Referencias).</li>
+                            <li>Navega con <kbd>↑</kbd> <kbd>↓</kbd> y confirma con <kbd>Enter</kbd> o <kbd>Tab</kbd>; <kbd>Esc</kbd> cierra el menú.</li>
+                            <li>En la barra de herramientas del editor dispones de chips directos para insertar etiquetas de apertura y cierre con el cursor posicionado adentro.</li>
                         </ul>
+
+                        <div class="overflow-x-auto border border-border-light dark:border-border-dark rounded-xl mt-4">
+                            <table class="w-full text-left text-xs text-slate-600 dark:text-slate-300">
+                                <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white border-b border-border-light dark:border-border-dark font-semibold">
+                                    <tr>
+                                        <th class="p-3">Atajo</th>
+                                        <th class="p-3">Efecto en el Editor</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-border-light dark:divide-border-dark">
+                                    <tr class="bg-surface-light dark:bg-surface-dark">
+                                        <td class="p-3 font-mono font-semibold text-primary"><kbd>Ctrl+Enter</kbd></td>
+                                        <td class="p-3">Genera y compila inmediatamente el documento PDF con vista previa en vivo.</td>
+                                    </tr>
+                                    <tr class="bg-surface-light dark:bg-surface-dark">
+                                        <td class="p-3 font-mono font-semibold text-primary"><kbd>Ctrl+S</kbd></td>
+                                        <td class="p-3">Guarda manualmente el documento en el almacenamiento local del navegador (localStorage).</td>
+                                    </tr>
+                                    <tr class="bg-surface-light dark:bg-surface-dark">
+                                        <td class="p-3 font-mono font-semibold text-primary"><kbd>-</kbd></td>
+                                        <td class="p-3">Despliega el menú predictivo de etiquetas en la posición actual del cursor (Modo Fuente).</td>
+                                    </tr>
+                                    <tr class="bg-surface-light dark:bg-surface-dark">
+                                        <td class="p-3 font-mono font-semibold text-primary"><kbd>Esc</kbd></td>
+                                        <td class="p-3">Cierra el autocompletado, desactiva la brocha 1-clic y oculta el menú flotante de selección.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-xl border border-indigo-100 dark:border-indigo-800 w-full md:w-64 shrink-0">
-                        <h4 class="font-semibold text-primary dark:text-indigo-400 mb-2 text-sm flex items-center gap-2"><span class="material-symbols-outlined text-sm">lightbulb</span> Tip Útil</h4>
-                        <p class="text-sm text-slate-600 dark:text-indigo-200">Usa el atajo <code>-Lorem</code> para insertar texto de relleno aleatorio al instante y probar el diseño visual de tus páginas.</p>
+                    <div class="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl border border-emerald-100 dark:border-emerald-800 w-full md:w-64 shrink-0">
+                        <h4 class="font-semibold text-primary dark:text-emerald-500 mb-2 text-sm flex items-center gap-2"><span class="material-symbols-outlined text-sm">lightbulb</span> Tip Útil</h4>
+                        <p class="text-sm text-slate-600 dark:text-emerald-200">Usa el atajo <code>-Lorem</code> en modo Fuente para insertar párrafos de prueba aleatorios y evaluar de inmediato el salto de página y la maqueta.</p>
                     </div>
                 </div>
             </section>
@@ -550,8 +759,8 @@ El compilador ha rendido excelentemente con todos los bloques disponibles.</span
                 
                 <div class="grid gap-4">
                     <div class="p-4 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10">
-                        <h4 class="font-bold text-red-700 dark:text-red-400 mb-1">El PDF se genera en blanco o da error</h4>
-                        <p class="text-sm text-red-600 dark:text-red-300">Verifica que TODAS tus etiquetas estén cerradas. Si abres un <code>@parr@</code> y olvidas poner el <code>@/parr@</code> al final, el procesador fallará al calcular los bloques de texto.</p>
+                        <h4 class="font-bold text-red-700 dark:text-red-400 mb-1">El PDF se genera con contenido repetido o texto que no era</h4>
+                        <p class="text-sm text-red-600 dark:text-red-300">Si abres un bloque (ej. <code>@parr@</code>) y olvidas poner el cierre <code>@/parr@</code>, ese bloque absorberá todo el texto posterior hasta encontrar un cierre o el final del documento — igual que una etiqueta de HTML. Revisa que cada etiqueta tenga su cierre.</p>
                     </div>
                     
                     <div class="p-4 rounded-xl border border-amber-200 dark:border-amber-900/30 bg-amber-50 dark:bg-amber-900/10">
@@ -561,7 +770,7 @@ El compilador ha rendido excelentemente con todos los bloques disponibles.</span
 
                     <div class="p-4 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark">
                         <h4 class="font-bold text-slate-900 dark:text-white mb-1">He perdido mi información</h4>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">El editor guarda tu código automáticamente en el navegador usando <code>localStorage</code>. Sin embargo, si borras la caché o usas modo incógnito, se perderá. Usa el botón "Descargar Código Fuente" de la barra lateral para hacer backups físicos en tu PC (.txt).</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">El editor guarda tu código automáticamente en el navegador usando <code>localStorage</code> y el atajo <kbd>Ctrl+S</kbd>. Sin embargo, si borras la caché o usas modo incógnito, se perderá: usa el botón "Descargar Código Fuente" de la barra lateral para hacer backups físicos en tu PC (.txt) y el botón "Descargar PDF" del encabezado para conservar el documento final en tu equipo.</p>
                     </div>
                 </div>
             </section>

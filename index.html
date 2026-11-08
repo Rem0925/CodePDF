@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>APA PDF Generator Studio - CodePDF v2</title>
-    
+    <meta name="description" content="CodePDF: editor de código y visual que genera documentos PDF en formato APA 7ma edición (portada, índice, citas y referencias con sangría francesa)."/>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23138a07'/%3E%3Cpath d='M7 4h7l4 4v11a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z' fill='white'/%3E%3Ctext x='12' y='16.5' font-size='6.5' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%23138a07'%3EPDF%3C/text%3E%3C/svg%3E"/>
+
     <!-- Fuentes e Iconos -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-    
+
     <!-- CodeMirror CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css"/>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <script>
@@ -23,18 +26,21 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#6366f1",
-                        secondary: "#4f46e5",
-                        "background-light": "#f3f4f6",
-                        "background-dark": "#0f172a",
+                        primary: "#138a07",
+                        "primary-light": "#4ade80",
+                        secondary: "#0c6304",
+                        "background-light": "#f1f5f9",
+                        "background-dark": "#090d16",
                         "surface-light": "#ffffff",
-                        "surface-dark": "#1e293b",
-                        "border-light": "#e5e7eb",
-                        "border-dark": "#334155",
+                        "surface-dark": "#111827",
+                        "surface-dark-elevated": "#1e293b",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#1f2937",
                     },
                     fontFamily: {
                         sans: ["Inter", "sans-serif"],
                         mono: ["JetBrains Mono", "monospace"],
+                        serif: ["Newsreader", "Times New Roman", "serif"],
                     },
                 },
             },
@@ -44,88 +50,255 @@
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body class="h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300 dark">
-    <div class="flex h-full w-full">
-        <!-- Sidebar -->
-        <aside class="w-20 flex-shrink-0 flex flex-col items-center py-6 bg-surface-light dark:bg-surface-dark border-r border-border-light dark:border-border-dark z-20 shadow-sm">
-            <div class="mb-8 w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
-                <span class="material-symbols-outlined text-xl">description</span>
-            </div>
-            <nav class="flex-1 flex flex-col space-y-6 w-full items-center">
-                <button class="group relative p-3 rounded-xl text-primary bg-indigo-50 dark:bg-indigo-500/10 dark:text-indigo-400 transition-all hover:scale-105" title="Editor">
-                    <span class="material-symbols-outlined">code</span>
-                </button>
-                <button onclick="saveToLocal()" class="group relative p-3 rounded-xl text-slate-400 hover:text-primary transition-all" title="Guardar Localmente">
-                    <span class="material-symbols-outlined">save</span>
-                </button>
-                <button onclick="downloadSource()" class="group relative p-3 rounded-xl text-slate-400 hover:text-primary transition-all" title="Descargar Código Fuente">
-                    <span class="material-symbols-outlined">download</span>
-                </button>
-                <div class="h-px w-8 bg-border-light dark:bg-border-dark my-2"></div>
-                <a href="Documentacion.html" target="_blank" class="group relative p-3 rounded-xl text-slate-400 hover:text-primary transition-all" title="Documentación">
-                    <span class="material-symbols-outlined">menu_book</span>
-                </a>
-            </nav>
-            <button onclick="toggleTheme()" class="p-3 rounded-xl text-slate-400 hover:text-indigo-500 transition-all" title="Cambiar Tema">
-                <span class="material-symbols-outlined">dark_mode</span>
-            </button>
-        </aside>
+    <div class="flex h-full w-full flex-col">
 
-        <!-- Main Content -->
-        <main class="flex-1 flex flex-col h-full overflow-hidden">
-            <header class="h-16 px-6 bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark flex items-center justify-between shrink-0 z-10">
-                <div class="flex items-center space-x-4">
-                    <h1 class="text-lg font-semibold tracking-tight text-slate-800 dark:text-white">APA Generator Studio</h1>
-                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">APA 7th Ed.</span>
-                    <span id="save-status" class="text-xs text-slate-400 flex items-center gap-1 opacity-0 transition-opacity">
-                        <span class="material-symbols-outlined text-[14px]">cloud_done</span> Guardado
-                    </span>
+        <!-- BARRA SUPERIOR PROFESIONAL (ESTILO OVERLEAF STUDIO) -->
+        <header class="h-14 flex items-center justify-between px-4 bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark shrink-0 z-30 shadow-xs">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-emerald-700 flex items-center justify-center text-white shadow-md shadow-primary/20 shrink-0">
+                    <span class="material-symbols-outlined text-xl">description</span>
                 </div>
-                <button id="generateBtn" onclick="generatePDF()" class="flex items-center space-x-2 bg-primary hover:bg-secondary text-white px-5 py-2.5 rounded-lg shadow-md transition-all active:scale-95 font-medium">
-                    <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
-                    <span>Generar Documento</span>
-                </button>
-            </header>
-
-            <div class="flex-1 flex overflow-hidden">
-                <!-- Editor Section -->
-                <section class="flex-1 flex flex-col border-r border-border-light dark:border-border-dark bg-slate-50 dark:bg-slate-900/50 relative min-w-[300px]">
-                    <div class="flex-1 relative overflow-hidden">
-                        <textarea id="code" name="code"></textarea>
-                        <div id="autocomplete-container"></div>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-sm font-bold tracking-tight leading-tight text-slate-900 dark:text-white">CodePDF Studio</h1>
+                        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-primary dark:bg-emerald-500/20 dark:text-emerald-300 border border-primary/20 dark:border-emerald-400/30">
+                            APA 7.ª Ed.
+                        </span>
                     </div>
-                    
-                    <!-- Footer del Editor: Contador de Palabras -->
-                    <div class="h-6 bg-surface-light dark:bg-surface-dark border-t border-border-light dark:border-border-dark flex items-center justify-end px-4 text-[10px] text-slate-400">
-                        <span id="word-count">0 palabras</span>
-                        <span class="mx-2">|</span>
-                        <span id="char-count">0 caracteres</span>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight truncate">Compilador académico con etiquetado inteligente y vista PDF en tiempo real</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <span id="save-status" class="text-xs text-slate-600 dark:text-slate-200 flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 opacity-0 transition-opacity font-medium">
+                    <span class="material-symbols-outlined text-[15px] text-emerald-500 dark:text-emerald-400">cloud_done</span>
+                    <span class="hidden sm:inline">Guardado</span>
+                </span>
+
+                <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-500 dark:text-slate-300 hover:text-primary dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Cambiar Tema" aria-label="Cambiar Tema">
+                    <span id="theme-icon" class="material-symbols-outlined text-xl">light_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden min-h-0">
+            <!-- BARRA LATERAL DE HERRAMIENTAS -->
+            <aside class="w-14 flex-shrink-0 flex flex-col items-center py-4 bg-surface-light dark:bg-surface-dark border-r border-border-light dark:border-border-dark z-20">
+                <nav class="flex-1 flex flex-col space-y-2 w-full items-center">
+                    <button id="side-source-btn" onclick="setEditorMode('source')" class="p-2.5 rounded-xl bg-primary/10 dark:bg-emerald-500/20 text-primary dark:text-emerald-400 transition-all hover:scale-105" title="Modo Fuente (Código)">
+                        <span class="material-symbols-outlined text-[20px]">code</span>
+                    </button>
+                    <button id="side-visual-btn" onclick="setEditorMode('visual')" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-300 hover:text-primary dark:hover:text-emerald-400 transition-all hover:bg-slate-100 dark:hover:bg-slate-800" title="Modo Visual Interactivo">
+                        <span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
+                    </button>
+                    <div class="h-px w-8 bg-border-light dark:bg-border-dark my-1"></div>
+                    <button onclick="openLocalFile()" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-300 hover:text-primary dark:hover:text-emerald-400 transition-all hover:bg-slate-100 dark:hover:bg-slate-800" title="Abrir Archivo .txt">
+                        <span class="material-symbols-outlined text-[20px]">folder_open</span>
+                    </button>
+                    <button onclick="saveToLocal()" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-300 hover:text-primary dark:hover:text-emerald-400 transition-all hover:bg-slate-100 dark:hover:bg-slate-800" title="Guardar Localmente (Ctrl+S)">
+                        <span class="material-symbols-outlined text-[20px]">save</span>
+                    </button>
+                    <button onclick="downloadSource()" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-300 hover:text-primary dark:hover:text-emerald-400 transition-all hover:bg-slate-100 dark:hover:bg-slate-800" title="Descargar Código Fuente (.txt)">
+                        <span class="material-symbols-outlined text-[20px]">download</span>
+                    </button>
+                    <div class="h-px w-8 bg-border-light dark:bg-border-dark my-1"></div>
+                    <a href="Documentacion.html" target="_blank" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-300 hover:text-primary dark:hover:text-emerald-400 transition-all hover:bg-slate-100 dark:hover:bg-slate-800" title="Documentación Oficial">
+                        <span class="material-symbols-outlined text-[20px]">menu_book</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- PANEL PRINCIPAL DIVIDIDO -->
+            <main class="flex flex-1 overflow-hidden min-h-0">
+
+                <!-- PANEL IZQUIERDO: EDITOR (FUENTE / VISUAL) -->
+                <section id="editor-pane" class="flex flex-col overflow-hidden min-w-[280px] bg-surface-light dark:bg-surface-dark" style="flex: 0 0 46%;">
+                    <div class="min-h-11 flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shrink-0">
+                        
+                        <!-- Conmutador estilo Overleaf: Fuente | Visual -->
+                        <div class="overleaf-mode-switch" role="tablist" aria-label="Modo de edición">
+                            <button type="button" id="mode-source-btn" onclick="setEditorMode('source')" role="tab" aria-selected="true" class="overleaf-mode-btn active" title="Editor de código con etiquetas">
+                                <span class="material-symbols-outlined text-[15px]">code</span>
+                                <span>Fuente</span>
+                            </button>
+                            <button type="button" id="mode-visual-btn" onclick="setEditorMode('visual')" role="tab" aria-selected="false" class="overleaf-mode-btn" title="Editor visual inteligente">
+                                <span class="material-symbols-outlined text-[15px]">auto_fix_high</span>
+                                <span>Visual</span>
+                            </button>
+                        </div>
+
+                        <!-- Herramientas rápidas del Modo Fuente -->
+                        <div id="quick-tags" class="flex flex-wrap items-center gap-1"></div>
+
+                        <!-- Herramientas rápidas del Modo Visual -->
+                        <div id="visual-toolbar" class="hidden flex-wrap items-center gap-1.5">
+                            <button type="button" onclick="openSmartPasteModal()" class="h-7 px-2.5 rounded-md text-[11px] font-semibold bg-primary text-white hover:bg-secondary flex items-center gap-1 shadow-xs transition-all" title="Pega tu texto completo y el sistema detectará cada parte automáticamente">
+                                <span class="material-symbols-outlined text-[14px]">content_paste_go</span>
+                                <span>Pegar Texto Completo</span>
+                            </button>
+                            <button type="button" onclick="autoClassifyExistingBlocks()" class="h-7 px-2.5 rounded-md text-[11px] font-semibold bg-emerald-500/10 dark:bg-emerald-500/20 text-primary dark:text-emerald-300 hover:bg-emerald-500/20 border border-primary/20 dark:border-emerald-400/30 flex items-center gap-1 transition-all" title="Re-analizar bloques y asignar etiquetas APA automáticamente">
+                                <span class="material-symbols-outlined text-[14px]">magic_button</span>
+                                <span>Auto-detectar</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sub-barra de Brocha Rápida (Solo visible en Modo Visual) -->
+                    <div id="visual-brush-bar" class="hidden items-center gap-1.5 px-3 py-1.5 bg-slate-100/90 dark:bg-[#0c1322] border-b border-border-light dark:border-border-dark overflow-x-auto shrink-0">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1 shrink-0 mr-1">
+                            <span class="material-symbols-outlined text-[14px] text-primary dark:text-emerald-400">format_paint</span>
+                            Brocha 1-Clic:
+                        </span>
+                        <div id="brush-buttons-container" class="flex items-center gap-1"></div>
+                    </div>
+
+                    <!-- ÁREA CENTRAL DEL EDITOR -->
+                    <div class="flex-1 relative overflow-hidden">
+                        <!-- VISTA 1: MODO FUENTE -->
+                        <div id="source-editor-view" class="w-full h-full">
+                            <textarea id="code" name="code"></textarea>
+                            <div id="autocomplete-container"></div>
+                        </div>
+
+                        <!-- VISTA 2: MODO VISUAL INTERACTIVO -->
+                        <div id="visual-editor-view" class="hidden w-full h-full flex-col bg-slate-100 dark:bg-[#090d16] overflow-y-auto p-3 sm:p-5">
+                            <div class="max-w-3xl w-full mx-auto mb-3 px-3.5 py-2.5 rounded-xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-slate-800 flex items-center justify-between gap-3 text-xs shadow-2xs">
+                                <div class="flex items-center gap-2.5 text-slate-600 dark:text-slate-300">
+                                    <span class="material-symbols-outlined text-primary dark:text-emerald-400 text-lg shrink-0">tips_and_updates</span>
+                                    <span>
+                                        <strong>Tip:</strong> Selecciona cualquier fragmento de texto con el ratón para <strong>dividirlo y asignarle su etiqueta APA</strong>, o usa la <strong>Brocha 1-Clic</strong> de arriba.
+                                    </span>
+                                </div>
+                                <button type="button" onclick="addVisualBlock('parr', '')" class="shrink-0 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white text-slate-700 dark:text-slate-200 font-semibold text-[11px] flex items-center gap-1 transition-colors">
+                                    <span class="material-symbols-outlined text-[14px]">add</span>
+                                    <span>Bloque</span>
+                                </button>
+                            </div>
+
+                            <div id="visual-blocks-container" class="max-w-3xl w-full mx-auto space-y-2.5 pb-16"></div>
+                        </div>
+                    </div>
+
+                    <!-- Barra de estado inferior -->
+                    <div class="h-7 flex items-center justify-between px-3 text-[11px] text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-[#0b101d] border-t border-border-light dark:border-border-dark shrink-0">
+                        <span id="status-shortcuts" class="truncate">
+                            <kbd>Ctrl+Enter</kbd> compila PDF · <kbd>Ctrl+S</kbd> guarda · <kbd>-</kbd> autocompleta etiqueta
+                        </span>
+                        <span class="flex items-center gap-2 shrink-0 font-semibold text-slate-700 dark:text-slate-200">
+                            <span id="word-count">0 palabras</span>
+                            <span class="opacity-40">·</span>
+                            <span id="char-count">0 caracteres</span>
+                        </span>
                     </div>
                 </section>
 
-                <section class="flex-1 bg-slate-200 dark:bg-slate-800 flex flex-col overflow-hidden relative">
-                    <div class="h-10 px-4 flex items-center justify-between border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shrink-0">
-                        <span class="text-xs font-medium text-slate-500 uppercase">Vista Previa PDF</span>
-                        <div class="flex items-center space-x-2">
-                           <span class="text-xs text-slate-400">Visor Nativo</span>
-                        </div>
+                <!-- DIVISOR ARRASTRABLE -->
+                <div id="splitter" class="w-1.5 cursor-col-resize bg-border-light dark:bg-border-dark hover:bg-primary dark:hover:bg-emerald-500 transition-colors shrink-0" title="Arrastra para redimensionar paneles"></div>
+
+                <!-- PANEL DERECHO: VISTA PREVIA PDF (Sin el texto de vista nativa carta) -->
+                <section class="flex-1 flex flex-col overflow-hidden min-w-[240px] bg-slate-200 dark:bg-[#070a12]">
+                    <div class="h-11 flex items-center gap-2.5 px-3 border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shrink-0">
+                        <button id="generateBtn" onclick="generatePDF()" class="h-8 flex items-center gap-2 px-4 rounded-lg bg-primary hover:bg-secondary text-white text-[13px] font-semibold shadow-sm shadow-primary/20 transition-all active:scale-95" aria-label="Generar PDF">
+                            <span class="material-symbols-outlined text-[18px]">autorenew</span>
+                            <span>Generar Documento</span>
+                        </button>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 shrink-0">PDF</span>
+                        <span class="flex-1"></span>
+                        <button id="downloadPdfBtn" onclick="downloadPdf()" disabled class="h-8 flex items-center gap-1.5 px-3 rounded-lg text-[12.5px] font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white dark:hover:bg-primary transition-all opacity-40 cursor-not-allowed disabled:pointer-events-none" title="Descargar el PDF generado" aria-label="Descargar PDF">
+                            <span class="material-symbols-outlined text-[18px]">file_download</span>
+                            <span class="hidden sm:inline">Descargar PDF</span>
+                        </button>
                     </div>
                     <div class="flex-1 relative w-full h-full">
                         <iframe id="preview" title="Previsualización del PDF"></iframe>
-                        <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 z-0 bg-slate-100 dark:bg-slate-900">
-                            <span class="material-symbols-outlined text-6xl mb-4 opacity-50">picture_as_pdf</span>
-                            <p>Presiona "Generar Documento" para ver el resultado</p>
+                        <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-slate-500 dark:text-slate-300 z-0 bg-slate-100 dark:bg-[#0b101b]">
+                            <div class="w-16 h-16 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 flex items-center justify-center mb-4 border border-slate-300/60 dark:border-slate-700">
+                                <span class="material-symbols-outlined text-4xl text-primary dark:text-emerald-400">picture_as_pdf</span>
+                            </div>
+                            <p class="text-sm font-medium text-slate-700 dark:text-slate-200">Vista previa del documento APA</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Presiona <strong class="text-primary dark:text-emerald-400">Generar Documento</strong> o usa <kbd>Ctrl+Enter</kbd></p>
                         </div>
                     </div>
                 </section>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 
-    <div id="toast-container" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50"></div>
+    <!-- MENÚ FLOTANTE AL SELECCIONAR TEXTO CON EL RATÓN EN MODO VISUAL -->
+    <div id="visual-selection-popover" class="fixed z-50 hidden flex-col gap-1.5 p-2 rounded-xl bg-slate-900/95 dark:bg-slate-900 text-white shadow-2xl border border-slate-700 backdrop-blur-md max-w-md">
+        <div class="flex items-center justify-between px-1.5 pb-1 border-b border-slate-700/80 text-[10px] text-slate-300 font-semibold uppercase tracking-wider">
+            <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px] text-emerald-400">ads_click</span>
+                Convertir selección en:
+            </span>
+            <div class="flex items-center gap-1">
+                <button type="button" onmousedown="event.preventDefault(); applyInlineFormatToSelection('**')" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-emerald-600 text-white font-bold text-[11px]" title="Negrita (**texto**)">B</button>
+                <button type="button" onmousedown="event.preventDefault(); applyInlineFormatToSelection('*')" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-emerald-600 text-white italic font-serif text-[11px]" title="Cursiva (*texto*)">I</button>
+            </div>
+        </div>
+        <div id="popover-tags-grid" class="flex flex-wrap gap-1"></div>
+    </div>
+
+    <!-- MODAL PARA PEGAR TEXTO COMPLETO Y AUTO-CLASIFICAR -->
+    <div id="smart-paste-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/65 backdrop-blur-xs p-4">
+        <div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-slate-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl flex flex-col max-h-[88vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-border-light dark:border-slate-800">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-primary dark:text-emerald-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined">content_paste_go</span>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white">Pegado Inteligente APA</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Pega aquí tu borrador completo (de Word, Google Docs o bloc de notas)</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeSmartPasteModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="my-4 flex-1 flex flex-col min-h-0">
+                <textarea id="smart-paste-textarea" rows="10" class="w-full flex-1 rounded-xl border border-border-light dark:border-slate-700 bg-slate-50 dark:bg-[#0b101d] text-slate-800 dark:text-slate-100 p-3.5 text-xs font-mono focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Ejemplo:
+UNIVERSIDAD NACIONAL
+Impacto de la Inteligencia Artificial en la Educación
+Juan Pérez
+2026
+
+Resumen
+Este estudio analiza el impacto de la IA en entornos universitarios...
+Palabras clave: inteligencia artificial, educación, APA
+
+Introducción
+En los últimos años, el avance tecnológico ha transformado...
+
+1. Marco Teórico
+1.1 Conceptos Fundamentales
+El aprendizaje automático permite..."></textarea>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-2">
+                    El sistema detectará automáticamente <strong>Portada, Resumen, Palabras clave, Introducción, Títulos (1 al 5), Párrafos, Citas largas, Listas, Conclusión y Referencias</strong>. Luego podrás ajustar cualquier parte con el ratón.
+                </p>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-3 border-t border-border-light dark:border-slate-800">
+                <button type="button" onclick="closeSmartPasteModal()" class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    Cancelar
+                </button>
+                <button type="button" onclick="processSmartPaste(false)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:bg-slate-300 dark:hover:bg-slate-700">
+                    Añadir al final
+                </button>
+                <button type="button" onclick="processSmartPaste(true)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-primary hover:bg-secondary text-white shadow-sm flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[16px]">auto_fix_high</span>
+                    <span>Reemplazar y Estructurar Todo</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed top-16 right-5 z-50"></div>
+    <input type="file" id="file-input" accept=".txt,text/plain" class="hidden"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
     <script src="js/Logic.js"></script>
 </body>
 </html>
